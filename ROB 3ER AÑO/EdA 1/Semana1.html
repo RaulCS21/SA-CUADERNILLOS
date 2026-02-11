@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>EdA 1 - Semana 1</title>
+
+<style>
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #eef2f7, #d9e2ec);
+  color: #2c2c2c;
+  margin: 0;
+  padding: 25px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 35px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+  animation: appear 1s ease;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  text-align: center;
+  color: #1f4fd8;
+  font-size: 2.3em;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+h2 {
+  margin-top: 40px;
+  color: #0f2f6b;
+  border-left: 6px solid #1f4fd8;
+  padding-left: 12px;
+}
+
+.card {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 22px;
+  margin: 22px 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.info {
+  background: linear-gradient(135deg, #e8f0fe, #f5f8ff);
+  border-left: 8px solid #1f4fd8;
+}
+
+.activity {
+  background: linear-gradient(135deg, #fff6e5, #fff1cc);
+  border-left: 8px solid #e0b000;
+}
+
+.eval {
+  background: linear-gradient(135deg, #e7f4ec, #d2eadc);
+  border-left: 8px solid #3c8c64;
+}
+
+.highlight {
+  background: #eef3ff;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  margin: 25px 0;
+}
+
+ul, ol {
+  margin-left: 25px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+.footer {
+  margin-top: 45px;
+  text-align: center;
+  font-weight: bold;
+  color: #1f4fd8;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  width: 90px;       /* ajusta tamaño aquí */
+  opacity: 0.95;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container" style="position: relative;">
+<img src="logo.jpg" class="logo" alt="Logo institucional">
+
+<h1>EdA 1 – Python desde CERO</h1>
+<div class="subtitle">Semana 1: ¿Qué es programar y para qué sirve?</div>
+
+<div class="card eval">
+<strong>Profesor: Alberto Condori Sanchez</strong><br>
+<strong>Nivel: Tercer Año de Secundaria</strong>
+</div>
+
+<div class="card info">
+<strong>Propósito de la sesión</strong><br>
+Comprender qué es la programación, para qué sirve y reconocer su importancia en la vida cotidiana.
+</div>
+
+<h2>1. Presentación del tema</h2>
+<p>
+Vivimos rodeados de tecnología como celulares, videojuegos, aplicaciones, cámaras y sistemas automatizados.
+</p>
+<p>
+Nada de esto funciona por sí solo.
+</p>
+
+<div class="highlight">
+Alguien tuvo que indicarle a la computadora qué hacer.  
+Eso es programar.
+</div>
+
+<h2>2. ¿Qué es programar?</h2>
+<p>
+Programar es darle instrucciones claras, ordenadas y precisas a una computadora para que realice una tarea.
+</p>
+
+<ul>
+  <li>La computadora no piensa.</li>
+  <li>No toma decisiones por sí sola.</li>
+  <li>Solo ejecuta las instrucciones que recibe.</li>
+</ul>
+
+<h2>3. ¿Para qué sirve programar?</h2>
+<p>La programación se utiliza en múltiples áreas:</p>
+
+<ul>
+  <li>Desarrollo de videojuegos</li>
+  <li>Aplicaciones móviles</li>
+  <li>Sistemas automatizados</li>
+  <li>Robótica</li>
+  <li>Cámaras inteligentes</li>
+  <li>Inteligencia Artificial</li>
+</ul>
+
+<div class="highlight">
+Todo lo que hace una computadora fue programado por una persona.
+</div>
+
+<h2>4. Actividad en clase: El robot humano</h2>
+
+<div class="card activity">
+<p><strong>Indicaciones:</strong></p>
+<ol>
+  <li>Un estudiante representará a un robot.</li>
+  <li>Otro estudiante dará instrucciones para que realice acciones simples.</li>
+  <li>El robot solo obedecerá instrucciones claras y exactas.</li>
+</ol>
+</div>
+
+<div class="card eval">
+<p><strong>Reflexión:</strong></p>
+<ul>
+  <li>¿Qué ocurrió cuando la instrucción no fue clara?</li>
+  <li>¿Por qué es importante el orden de las instrucciones?</li>
+</ul>
+</div>
+
+<h2>5. Lenguaje que aprenderemos</h2>
+<p>
+Durante este curso aprenderás el lenguaje de programación Python, el cual es fácil de entender y muy utilizado en el mundo académico y profesional.
+</p>
+
+<p>
+Más adelante, usarás Python para crear programas, juegos y aplicaciones visuales.
+</p>
+
+<h2>6. Actividad para casa</h2>
+
+<div class="card activity">
+<p>
+Responde las siguientes preguntas en la <strong>TAREA – Semana 1</strong> disponible en la plataforma Moodle:
+</p>
+
+<ol>
+  <li>¿Qué es programar con tus propias palabras?</li>
+  <li>Menciona dos ejemplos donde se utilice la programación.</li>
+  <li>¿Qué te gustaría crear aprendiendo a programar?</li>
+</ol>
+</div>
+
+<h2>7. Criterios de evaluación</h2>
+
+<div class="card eval">
+<ul>
+  <li>Comprende el concepto básico de programación.</li>
+  <li>Participa activamente en la actividad de clase.</li>
+  <li>Responde las preguntas con ideas propias y coherentes.</li>
+  <li>Presenta la actividad dentro del plazo establecido.</li>
+</ul>
+</div>
+
+<h2>8. ¿Qué aprenderás después?</h2>
+<p>
+En la próxima sesión conocerás el entorno de Google Colab y ejecutarás tu primer programa en Python.
+</p>
+
+<div class="footer">
+Inicio del camino en la programación
+</div>
+
+</div>
+</body>
+</html>
