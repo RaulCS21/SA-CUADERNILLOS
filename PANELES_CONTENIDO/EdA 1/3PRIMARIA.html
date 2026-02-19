@@ -13,13 +13,14 @@
       margin: 0;
       background: linear-gradient(180deg, #f8fafc, #eef2ff);
       color: #0f172a;
-      padding: 30px;
+      padding: 15px 30px 30px; /* 🔽 menos espacio arriba */
     }
 
     h1 {
       text-align: center;
-      font-size: 2.3rem;
-      margin-bottom: 8px;
+      font-size: 2.2rem;
+      margin-top: 5px;   /* 🔽 baja el margen superior */
+      margin-bottom: 6px;
       background: linear-gradient(90deg, #2563eb, #16a34a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -28,14 +29,15 @@
     .subtitle {
       text-align: center;
       color: #475569;
-      margin-bottom: 25px;
+      margin-top: 0;
+      margin-bottom: 15px; /* 🔽 más compacto */
     }
 
     .grid-top, .grid-bottom {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
+      gap: 16px;              /* 🔽 menos espacio entre tarjetas */
+      margin-bottom: 18px;   /* 🔽 más compacto */
       animation: fadeIn 1s ease;
       justify-items: center;
     }
@@ -44,16 +46,10 @@
       width: 100%;
       background: white;
       border-radius: 16px;
-      padding: 18px;
+      padding: 16px;          /* 🔽 un pelín más compacto */
       border: 1px solid #e2e8f0;
       box-shadow: 0 10px 20px rgba(0,0,0,.06);
-      transition: transform .3s ease, box-shadow .3s ease;
       text-align: center;
-    }
-
-    .card:hover {
-      transform: translateY(-5px) scale(1.01);
-      box-shadow: 0 20px 35px rgba(0,0,0,.12);
     }
 
     .tag {
@@ -63,63 +59,98 @@
       padding: 4px 12px;
       border-radius: 999px;
       font-size: .75rem;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: 500;
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      text-align: center;
-      font-size: .95rem;
-    }
-
-    li {
-      margin-bottom: 6px;
-    }
+    ul { list-style: none; padding: 0; margin: 0; text-align: center; }
+    li { margin-bottom: 6px; }
 
     .weeks {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;           /* 🔽 menos espacio entre semanas */
       margin-top: 10px;
     }
 
     .week {
+      position: relative;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
-      padding: 14px;
-      transition: transform .3s ease;
+      padding: 12px 12px 28px;  /* 🔽 más compacto */
       text-align: center;
+      transition: transform .3s ease, box-shadow .3s ease;
     }
 
     .week:hover {
-      transform: scale(1.04);
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(0,0,0,.12);
     }
 
-    .week strong {
-      color: #2563eb;
-      display: block;
-      margin-bottom: 6px;
+    .week strong { color: #2563eb; display: block; margin-bottom: 4px; }
+    .tema { font-weight: 500; margin-bottom: 4px; }
+    .desempeno { font-size: .82rem; color: #475569; }
+
+    .status-bar {
+      position: absolute;
+      left: 0;
+      bottom: 16px;
+      height: 5px;
+      width: 100%;
+      background: #cbd5e1;
     }
 
-    .tema {
-      font-weight: 500;
-      margin-bottom: 6px;
+    .asignada .status-bar { background: #94a3b8; }
+    .en-curso .status-bar { background: #facc15; }
+    .realizada .status-bar { background: #22c55e; }
+
+    .status-text {
+      position: absolute;
+      left: 0;
+      bottom: 2px;
+      width: 100%;
+      font-size: .72rem;
+      font-weight: 600;
     }
 
-    .desempeno {
-      font-size: .85rem;
+    .asignada .status-text { color: #64748b; }
+    .en-curso .status-text { color: #ca8a04; }
+    .realizada .status-text { color: #15803d; }
+
+    .progress-wrap {
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      border-radius: 999px;
+      animation: load 1.2s ease forwards;
+    }
+
+    .progress-label {
+      font-size: .8rem;
       color: #475569;
+      font-weight: 600;
     }
 
     .info {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;            /* 🔽 menos espacio */
+      margin-bottom: 18px; /* 🔽 más compacto */
       justify-items: center;
     }
 
@@ -127,25 +158,23 @@
       width: 100%;
       background: white;
       border-radius: 14px;
-      padding: 16px;
+      padding: 14px;       /* 🔽 más compacto */
       border: 1px solid #e2e8f0;
       text-align: center;
       box-shadow: 0 8px 16px rgba(0,0,0,.06);
     }
 
-    .info-box span {
-      display: block;
-      color: #64748b;
-      font-size: .8rem;
-    }
-
-    .info-box strong {
-      font-size: 1rem;
-    }
+    .info-box span { display: block; color: #64748b; font-size: .78rem; }
+    .info-box strong { font-size: .95rem; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes load {
+      from { width: 0; }
+      to { width: var(--progress); }
     }
   </style>
 </head>
@@ -195,39 +224,82 @@
     <div class="card">
       <span class="tag">Plan de sesiones - 5 semanas</span>
 
+      <div class="progress-wrap">
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar" style="--progress: 0%"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">Progreso: 0%</div>
+      </div>
+
       <div class="weeks">
-        <div class="week">
+        <div class="week realizada">
           <strong>Semana 1</strong>
           <div class="tema">Tema: Explorador de Windows</div>
           <div class="desempeno">Desempeño: Organiza archivos y carpetas para una tarea escolar.</div>
+          <div class="status-bar"></div>
+          <div class="status-text"></div>
         </div>
 
-        <div class="week">
+        <div class="week en-curso">
           <strong>Semana 2</strong>
           <div class="tema">Tema: Creación de carpetas y documentos</div>
           <div class="desempeno">Desempeño: Clasifica documentos en carpetas según su propósito.</div>
+          <div class="status-bar"></div>
+          <div class="status-text"></div>
         </div>
 
-        <div class="week">
+        <div class="week realizada">
           <strong>Semana 3</strong>
           <div class="tema">Tema: PowerPoint: insertar texto e imágenes</div>
           <div class="desempeno">Desempeño: Crea diapositivas con texto e imágenes claras.</div>
+          <div class="status-bar"></div>
+          <div class="status-text"></div>
         </div>
 
-        <div class="week">
+        <div class="week asignada">
           <strong>Semana 4</strong>
           <div class="tema">Tema: Diseño de diapositivas</div>
           <div class="desempeno">Desempeño: Organiza la información en una presentación visual.</div>
+          <div class="status-bar"></div>
+          <div class="status-text"></div>
         </div>
 
-        <div class="week">
+        <div class="week asignada">
           <strong>Semana 5</strong>
           <div class="tema">Tema: Avatar: creación de imagen virtual</div>
           <div class="desempeno">Desempeño: Diseña su avatar y presenta su trabajo final.</div>
+          <div class="status-bar"></div>
+          <div class="status-text"></div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    function actualizarEstados() {
+      document.querySelectorAll('.week').forEach(week => {
+        const statusText = week.querySelector('.status-text');
+        if (week.classList.contains('realizada')) statusText.innerText = 'Clase realizada';
+        else if (week.classList.contains('en-curso')) statusText.innerText = 'En curso';
+        else statusText.innerText = 'Asignada';
+      });
+    }
+
+    function actualizarProgreso() {
+      const total = document.querySelectorAll('.week').length;
+      const realizadas = document.querySelectorAll('.week.realizada').length;
+      const percent = Math.round((realizadas / total) * 100);
+
+      const bar = document.getElementById('progressBar');
+      const label = document.getElementById('progressLabel');
+
+      bar.style.setProperty('--progress', percent + '%');
+      label.innerText = `Progreso: ${percent}% (${realizadas} de ${total} clases)`;
+    }
+
+    actualizarEstados();
+    actualizarProgreso();
+  </script>
 
 </body>
 </html>
