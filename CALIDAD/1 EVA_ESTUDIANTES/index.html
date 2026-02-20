@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema Evaluación</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #4e73df, #1cc88a);
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      width: 400px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      color: #555;
+      display: block;
+      margin-bottom: 6px;
+      margin-top: 15px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    select:focus {
+      border-color: #4e73df;
+      box-shadow: 0 0 0 3px rgba(78,115,223,0.2);
+    }
+
+    select:hover {
+      border-color: #1cc88a;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media(max-width: 480px) {
+      .card {
+        width: 90%;
+        padding: 25px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h2>📚 Registro de Evaluación</h2>
+
+    <label>Nivel</label>
+    <select id="nivel">
+      <option value="">Seleccione nivel</option>
+    </select>
+
+    <label>Área</label>
+    <select id="area">
+      <option value="">Seleccione área</option>
+    </select>
+
+    <label>Competencia</label>
+    <select id="competencia">
+      <option value="">Seleccione competencia</option>
+    </select>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDwh4DIzzxRyPPzMxCZaIGcdywo-8_h5rk",
+      authDomain: "eva-estudiantes.firebaseapp.com",
+      databaseURL: "https://eva-estudiantes-default-rtdb.firebaseio.com",
+      projectId: "eva-estudiantes",
+      storageBucket: "eva-estudiantes.firebasestorage.app",
+      messagingSenderId: "692305850400",
+      appId: "1:692305850400:web:2b15a925a9669438ad8c45"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const nivelSelect = document.getElementById("nivel");
+    const areaSelect = document.getElementById("area");
+    const competenciaSelect = document.getElementById("competencia");
+
+    // Cargar niveles
+    const nivelesRef = ref(db, 'niveles');
+
+    get(nivelesRef).then(snapshot => {
+      snapshot.forEach(child => {
+        const option = document.createElement("option");
+        option.value = child.key;
+        option.textContent = child.val().nombre;
+        nivelSelect.appendChild(option);
+      });
+    });
+
+    // Cuando cambia nivel
+    nivelSelect.addEventListener("change", () => {
+      areaSelect.innerHTML = '<option value="">Seleccione área</option>';
+      competenciaSelect.innerHTML = '<option value="">Seleccione competencia</option>';
+
+      const nivel = nivelSelect.value;
+      if (!nivel) return;
+
+      const areasRef = ref(db, `niveles/${nivel}/areas`);
+
+      get(areasRef).then(snapshot => {
+        snapshot.forEach(child => {
+          const option = document.createElement("option");
+          option.value = child.key;
+          option.textContent = child.val().nombre;
+          areaSelect.appendChild(option);
+        });
+      });
+    });
+
+    // Cuando cambia área
+    areaSelect.addEventListener("change", () => {
+      competenciaSelect.innerHTML = '<option value="">Seleccione competencia</option>';
+
+      const nivel = nivelSelect.value;
+      const area = areaSelect.value;
+      if (!nivel || !area) return;
+
+      const compRef = ref(db, `niveles/${nivel}/areas/${area}/competencias`);
+
+      get(compRef).then(snapshot => {
+        snapshot.forEach(child => {
+          const option = document.createElement("option");
+          option.value = child.key;
+          option.textContent = child.val().descripcion;
+          competenciaSelect.appendChild(option);
+        });
+      });
+    });
+
+  </script>
+
+</body>
+</html>

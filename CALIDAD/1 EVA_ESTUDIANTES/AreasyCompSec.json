@@ -1,0 +1,154 @@
+{
+  "niveles": {
+    "secundaria": {
+      "nombre": "Secundaria",
+      "areas": {
+        "AYC": {
+          "nombre": "Arte y Cultura",
+          "competencias": {
+            "COMPS1": {
+              "descripcion": "Aprecia de manera crítica manifestaciones artístico-culturales"
+            },
+            "COMPS2": {
+              "descripcion": "Crea proyectos desde los lenguajes artísticos"
+            }
+          }
+        },
+        "CYC": {
+          "nombre": "Ciencia y Tecnología",
+          "competencias": {
+            "COMPS3": {
+              "descripcion": "Diseña y construye soluciones tecnológicas para resolver problemas"
+            },
+            "COMPS4": {
+              "descripcion": "Explica el mundo físico basándose en conocimientos sobre los seres vivos; materia y energía; biodiversidad, Tierra y universo"
+            },
+            "COMPS5": {
+              "descripcion": "Indaga mediante métodos científicos"
+            }
+          }
+        },
+        "CS": {
+          "nombre": "Ciencias Sociales",
+          "competencias": {
+            "COMPS6": {
+              "descripcion": "Construye interpretaciones históricas"
+            },
+            "COMPS7": {
+              "descripcion": "Gestiona responsablemente el ambiente y el espacio"
+            },
+            "COMPS8": {
+              "descripcion": "Gestiona responsablemente los recursos económicos"
+            }
+          }
+        },
+        "COM": {
+          "nombre": "Comunicación",
+          "competencias": {
+            "COMPS9": {
+              "descripcion": "Escribe diversos tipos de textos"
+            },
+            "COMPS10": {
+              "descripcion": "Lee diversos tipos de textos escritos"
+            },
+            "COMPS11": {
+              "descripcion": "Se comunica oralmente en lengua materna"
+            }
+          }
+        },
+        "DPCC": {
+          "nombre": "Desarrollo Personal, Ciudadanía y Cívica",
+          "competencias": {
+            "COMPS12": {
+              "descripcion": "Construye su identidad"
+            },
+            "COMPS13": {
+              "descripcion": "Convive y participa democráticamente"
+            }
+          }
+        },
+        "EF": {
+          "nombre": "Educación Física",
+          "competencias": {
+            "COMPS14": {
+              "descripcion": "Asume una vida saludable"
+            },
+            "COMPS15": {
+              "descripcion": "Interactúa a través de sus habilidades sociomotrices"
+            },
+            "COMPS16": {
+              "descripcion": "Se desenvuelve de manera autónoma a través de su motricidad"
+            }
+          }
+        },
+        "FRA": {
+          "nombre": "Francés",
+          "competencias": {
+            "COMPS17": {
+              "descripcion": "Escribe diversos tipos de textos francés como lengua extranjera"
+            },
+            "COMPS18": {
+              "descripcion": "Lee diversos tipos de textos en francés como lengua extranjera"
+            },
+            "COMPS19": {
+              "descripcion": "Se comunica oralmente en francés como lengua extranjera"
+            }
+          }
+        },
+        "INF": {
+          "nombre": "Educación para el Trabajo",
+          "competencias": {
+            "COMPS20": {
+              "descripcion": "Gestiona proyectos de emprendimiento económico y social"
+            }
+          }
+        },
+        "ING": {
+          "nombre": "Inglés",
+          "competencias": {
+            "COMPS21": {
+              "descripcion": "Escribe diversos tipos de textos inglés como lengua extranjera"
+            },
+            "COMPS22": {
+              "descripcion": "Lee diversos tipos de textos en inglés como lengua extranjera"
+            },
+            "COMPS23": {
+              "descripcion": "Se comunica oralmente en inglés como lengua extranjera"
+            }
+          }
+        },
+        "MAT": {
+          "nombre": "Matemática",
+          "competencias": {
+            "COMPS24": {
+              "descripcion": "Indaga mediante métodos científicos"
+            },
+            "COMPS25": {
+              "descripcion": "Resuelve problemas de cantidad"
+            },
+            "COMPS26": {
+              "descripcion": "Resuelve problemas de gestión de datos e incertidumbre"
+            },
+            "COMPS27": {
+              "descripcion": "Resuelve problemas de movimiento, forma y localización"
+            },
+            "COMPS28": {
+              "descripcion": "Resuelve problemas de regularidad, equivalencia y cambio"
+            }
+          }
+        },
+        "REL": {
+          "nombre": "Educación Religiosa",
+          "competencias": {
+            "COMPS29": {
+              "descripcion": "Asume la experiencia el encuentro personal y comunitario con Dios"
+            },
+            "COMPS30": {
+              "descripcion": "Construye su identidad como persona humana, amada por Dios, digna, libre y trascendente"
+            }
+          }
+        }
+      }
+    }
+  }
+}
