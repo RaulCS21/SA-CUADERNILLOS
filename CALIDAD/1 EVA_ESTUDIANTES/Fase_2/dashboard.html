@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Sistema EVA - Comparativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .filter-chip { transition: all 0.2s; cursor: pointer; border: 1px solid #e2e8f0; }
+        .filter-chip.active { background-color: #4f46e5; color: white; border-color: #4338ca; }
+        .kpi-card { padding: 1.5rem; border-radius: 1.25rem; min-height: 120px; display: flex; flex-direction: column; justify-content: center; }
+        .chart-container { background: white; padding: 1.5rem; border-radius: 1.5rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        
+        /* Estilos Menú Móvil */
+        .nav-active .nav-icon-container { background-color: #eef2ff; color: #4f46e5; }
+        .nav-active span { color: #4f46e5; }
+        .nav-inactive { color: #94a3b8; }
+
+        /* AJUSTES PARA PDF E IMPRESIÓN */
+        @media print {
+            body { -webkit-print-color-adjust: exact; background-color: white !important; }
+            .no-export { display: none !important; }
+            
+            /* Expandir contenido principal al ancho total */
+            main { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            #reportContent { display: block !important; }
+            
+            /* Aumento drástico de fuentes para legibilidad */
+            h4 { font-size: 28pt !important; } /* KPIs */
+            h3 { font-size: 18pt !important; } /* Títulos gráficos */
+            p, span, .text-xs { font-size: 14pt !important; }
+            
+            .chart-container { 
+                break-inside: avoid; 
+                margin-bottom: 30px !important;
+                border: 2px solid #f1f5f9 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc]">
+
+    <nav class="bg-white shadow-sm border-b px-6 py-3 flex justify-between items-center sticky top-0 z-50 no-export">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-2">
+                <div class="bg-indigo-600 p-2 rounded-lg shadow-lg">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <span class="font-bold text-gray-800 text-lg tracking-tight">Sistema EVA</span>
+            </div>
+            <div class="hidden md:flex items-center gap-6 border-l pl-8">
+                <a href="registros.html" class="text-sm font-bold text-slate-400 hover:text-indigo-500 transition-colors">Registros</a>
+                <a href="dashboard.html" class="text-sm font-black text-indigo-600 border-b-2 border-indigo-600 pb-1">Dashboard</a>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button id="btnPDF" class="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-700 transition-all shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Exportar PDF
+            </button>
+            <img id="userPhoto" class="w-10 h-10 rounded-full border border-gray-200 object-cover shadow-sm">
+            <button id="btnLogout" class="p-2 text-red-400 hover:bg-red-50 rounded-full transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
+        </div>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row min-h-screen pb-24 md:pb-0" id="reportContent">
+        <aside class="w-full lg:w-64 bg-white border-r p-5 space-y-6 no-export">
+            <div class="flex items-center justify-between border-b pb-2">
+                <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Filtros</h2>
+                <button id="btnReset" class="text-[9px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-2 py-1 rounded-md">Limpiar</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Momento de Evaluación</label>
+                    <select id="fMomento" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="ALL">TODOS LOS MOMENTOS (Promedio)</option>
+                        <option value="salida">Salida (Final)</option>
+                        <option value="diagnostico">Ingreso (Diagnóstico)</option>
+                        <option value="intermedio">Proceso (Intermedio)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Área Curricular</label>
+                    <select id="fArea" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl text-xs outline-none"></select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Grado</label>
+                    <select id="fGrado" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl text-xs outline-none"></select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-tight">Secciones</label>
+                    <div id="contSecciones" class="grid grid-cols-2 gap-2"></div>
+                </div>
+            </div>
+            <div class="pt-2">
+                <h2 class="text-[10px] font-black text-slate-400 uppercase mb-3 italic">Competencias</h2>
+                <div id="contCompetencias" class="space-y-1.5 max-h-48 overflow-y-auto pr-2 custom-scroll"></div>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 md:p-6 space-y-6 bg-[#f8fafc]">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="kpi-card bg-white border border-slate-200 shadow-sm">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">Total Muestra</p>
+                    <h4 id="kpiTotal" class="text-2xl font-black text-slate-800">0</h4>
+                </div>
+                <div class="kpi-card bg-indigo-600 text-white shadow-lg shadow-indigo-100">
+                    <p class="text-[10px] font-bold text-indigo-100 uppercase tracking-tighter">Predominio General</p>
+                    <h4 id="kpiNivel" class="text-3xl font-black">-</h4>
+                </div>
+                <div class="kpi-card bg-white border border-l-4 border-l-emerald-500 shadow-sm">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">Crecimiento (A+AD)</p>
+                    <h4 id="kpiCrecimiento" class="text-2xl font-black text-emerald-600">0%</h4>
+                </div>
+                <div class="kpi-card bg-white border border-l-4 border-l-red-500 shadow-sm">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">Alerta (% C)</p>
+                    <h4 id="kpiAlerta" class="text-2xl font-black text-red-600">0%</h4>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="chart-container">
+                    <h3 class="text-[11px] font-black text-slate-800 uppercase mb-4 flex items-center gap-2">
+                         <span class="w-1.5 h-3 bg-indigo-500 rounded-full"></span> Desempeño Comparativo
+                    </h3>
+                    <div class="h-72"><canvas id="chartAgrupado"></canvas></div>
+                </div>
+                <div class="chart-container">
+                    <h3 class="text-[11px] font-black text-slate-800 uppercase mb-4 flex items-center gap-2">
+                        <span class="w-1.5 h-3 bg-emerald-500 rounded-full"></span> Evolución del Logro
+                    </h3>
+                    <div class="h-72"><canvas id="chartTendencia"></canvas></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="chart-container">
+                    <h3 class="text-[11px] font-black text-slate-800 uppercase mb-4" id="tituloPie">Distribución por Niveles</h3>
+                    <div class="h-64"><canvas id="chartPieEntrada"></canvas></div>
+                </div>
+                <div class="lg:col-span-2 chart-container overflow-hidden">
+                    <h3 class="text-[11px] font-black text-red-500 uppercase mb-4 italic text-center">Top Competencias Críticas (% C)</h3>
+                    <div id="listaTopCompetencias" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                <div class="chart-container border-l-4 border-l-emerald-500">
+                    <h3 class="text-[11px] font-black text-emerald-600 uppercase mb-4 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                        Top 3 Mejores (Grado y Sección)
+                    </h3>
+                    <div id="listaTopMejores" class="space-y-2"></div>
+                </div>
+
+                <div class="chart-container border-l-4 border-l-red-500">
+                    <h3 class="text-[11px] font-black text-red-600 uppercase mb-4 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        Top 3 Necesitan Apoyo (Grado y Sección)
+                    </h3>
+                    <div id="listaTopCriticos" class="space-y-2"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-3 flex justify-around items-center z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] no-export">
+        <a href="registros.html" id="mobile-nav-registros" class="flex flex-col items-center gap-1 group">
+            <div class="nav-icon-container p-2 rounded-xl transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Registros</span>
+        </a>
+        <a href="dashboard.html" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 group">
+            <div class="nav-icon-container p-2 rounded-xl transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Dashboard</span>
+        </a>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDwh4DIzzxRyPPzMxCZaIGcdywo-8_h5rk",
+        authDomain: "eva-estudiantes.firebaseapp.com",
+        databaseURL: "https://eva-estudiantes-default-rtdb.firebaseio.com",
+        projectId: "eva-estudiantes",
+        storageBucket: "eva-estudiantes.firebasestorage.app",
+        messagingSenderId: "692305850400",
+        appId: "1:692305850400:web:2b15a925a9669438ad8c45"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    let dataOriginal = [];
+    let compsSeleccionadas = new Set();
+    let seccionesSeleccionadas = new Set();
+    let charts = {};
+    const COLORS = { ad: '#1e40af', a: '#f97316', b: '#94a3b8', c: '#eab308' };
+
+    // --- NUEVA VARIABLE GLOBAL PARA ROLES ---
+    let userRoleData = null;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
+            
+            // 1. OBTENER ROL DESDE LA DB
+            const emailKey = user.email.replace(/\./g, ',');
+            const roleRef = ref(db, `configuracion_roles/${emailKey}`);
+            
+            try {
+                const snapshot = await get(roleRef);
+                if (snapshot.exists()) {
+                    userRoleData = { email: user.email, ...snapshot.val() };
+                } else {
+                    // Si no está en la lista, es docente por defecto
+                    userRoleData = { email: user.email, rol: 'docente' };
+                }
+                
+                console.log("Sesión iniciada como:", userRoleData.rol);
+                
+                // 2. CARGAR DATOS Y RESTRINGIR UI
+                bloquearInterfazSegunRol();
+                obtenerDatos();
+                activarMenuMovil();
+                
+            } catch (error) {
+                console.error("Error al cargar roles:", error);
+                obtenerDatos();
+            }
+        } else { 
+            window.location.href = 'index.html'; 
+        }
+    });
+
+    // --- NUEVA FUNCIÓN PARA BLOQUEAR FILTROS ---
+    function bloquearInterfazSegunRol() {
+        if (!userRoleData) return;
+
+        const fArea = document.getElementById('fArea');
+        const fGrado = document.getElementById('fGrado');
+
+        if (userRoleData.rol === 'coordinador') {
+            // El área vendrá pre-poblada en obtenerDatos, pero aquí preparamos el bloqueo
+            fArea.disabled = true;
+        }
+
+        if (userRoleData.rol === 'subdirector') {
+            // Lógica opcional: podrías deshabilitar grados que no pertenecen a su nivel
+        }
+    }
+
+    function obtenerDatos() {
+        onValue(ref(db, 'registros_notas'), (snapshot) => {
+            if (snapshot.exists()) {
+                dataOriginal = Object.values(snapshot.val());
+                poblarFiltrosEstaticos();
+                aplicarFiltros();
+            }
+        });
+    }
+
+    function activarMenuMovil() {
+        const path = window.location.pathname;
+        const btnRegistros = document.getElementById('mobile-nav-registros');
+        const btnDashboard = document.getElementById('mobile-nav-dashboard');
+        if (path.includes('registros.html')) {
+            btnRegistros?.classList.add('nav-active');
+        } else {
+            btnDashboard?.classList.add('nav-active');
+        }
+    }
+
+    function poblarFiltrosEstaticos() {
+        const fArea = document.getElementById('fArea');
+        const fGrado = document.getElementById('fGrado');
+        
+        // --- RESTRICCIÓN DE POBLACIÓN POR ROL ---
+        let areas = [...new Set(dataOriginal.map(d => d.detalles.area))].sort();
+        let grados = [...new Set(dataOriginal.map(d => d.detalles.grado))].sort();
+
+        // Si es coordinador, solo mostramos su área
+        if (userRoleData && userRoleData.rol === 'coordinador') {
+            areas = [userRoleData.area];
+            fArea.innerHTML = areas.map(a => `<option value="${a}">${a}</option>`).join('');
+            fArea.disabled = true;
+        } else {
+            fArea.innerHTML = '<option value="TODAS">Todas las Áreas</option>' + areas.map(a => `<option value="${a}">${a}</option>`).join('');
+        }
+
+        fGrado.innerHTML = '<option value="TODOS">Todos los Grados</option>' + grados.map(g => `<option value="${g}">${g}° Grado</option>`).join('');
+        actualizarChecksYComps();
+    }
+
+    function actualizarChecksYComps() {
+        const area = document.getElementById('fArea').value;
+        const grado = document.getElementById('fGrado').value;
+        const contSec = document.getElementById('contSecciones');
+        const contComp = document.getElementById('contCompetencias');
+
+        let secciones = new Set();
+        dataOriginal.forEach(d => {
+            // Aplicamos filtro de seguridad también aquí para las secciones visibles
+            const cumpleRol = validarAccesoRegistro(d);
+            if(cumpleRol && (grado === 'TODOS' || d.detalles.grado === grado) && (area === 'TODAS' || d.detalles.area === area)) {
+                Object.keys(d.puntajes).forEach(s => secciones.add(s));
+            }
+        });
+
+        contSec.innerHTML = [...secciones].sort().map(s => `
+            <div class="relative">
+                <input type="checkbox" id="sec_${s}" value="${s}" class="checkbox-custom hidden" ${seccionesSeleccionadas.has(s) ? 'checked' : ''}>
+                <label for="sec_${s}" class="flex items-center justify-center p-1.5 border rounded-lg text-[9px] font-bold cursor-pointer hover:bg-slate-50 uppercase">${s}</label>
+            </div>
+        `).join('');
+
+        contSec.querySelectorAll('input').forEach(chk => chk.onchange = (e) => {
+            e.target.checked ? seccionesSeleccionadas.add(e.target.value) : seccionesSeleccionadas.delete(e.target.value);
+            aplicarFiltros();
+        });
+
+        if (area === 'TODAS') {
+            contComp.innerHTML = '<p class="text-[9px] text-slate-400 italic text-center py-4">Seleccione un área</p>';
+            return;
+        }
+        const comps = [...new Set(dataOriginal.filter(d => d.detalles.area === area).map(d => d.detalles.competencia))].sort();
+        contComp.innerHTML = comps.map(c => `<div class="filter-chip p-2 rounded-lg text-[9px] font-bold uppercase truncate ${compsSeleccionadas.has(c) ? 'active' : 'bg-slate-50 text-slate-500'}" onclick="window.toggleC('${c}')">${c}</div>`).join('');
+    }
+
+    // --- FUNCIÓN DE SEGURIDAD PARA VALIDAR CADA REGISTRO ---
+    function validarAccesoRegistro(reg) {
+        if (!userRoleData) return false;
+        const u = userRoleData;
+
+        if (u.rol === 'calidad') return true;
+        if (u.rol === 'subdirector') return reg.detalles.nivel === u.nivel;
+        if (u.rol === 'coordinador') return reg.detalles.area === u.area;
+        if (u.rol === 'docente') return reg.usuario === u.email;
+
+        return false;
+    }
+
+    window.toggleC = (c) => {
+        compsSeleccionadas.has(c) ? compsSeleccionadas.delete(c) : compsSeleccionadas.add(c);
+        actualizarChecksYComps();
+        aplicarFiltros();
+    };
+
+    function aplicarFiltros() {
+        const area = document.getElementById('fArea').value;
+        const grado = document.getElementById('fGrado').value;
+        const momentoPie = document.getElementById('fMomento').value;
+        
+        const resumen = {
+            diagnostico: { ad:0, a:0, b:0, c:0, total: 0 },
+            intermedio: { ad:0, a:0, b:0, c:0, total: 0 },
+            salida: { ad:0, a:0, b:0, c:0, total: 0 }
+        };
+
+        // --- FILTRO MAESTRO CON SEGURIDAD ---
+        const dataFiltradaSeguridad = dataOriginal.filter(reg => validarAccesoRegistro(reg));
+
+        dataFiltradaSeguridad.forEach(reg => {
+            const matchArea = area === 'TODAS' || reg.detalles.area === area;
+            const matchGrado = grado === 'TODOS' || reg.detalles.grado === grado;
+            const matchComp = compsSeleccionadas.size === 0 || compsSeleccionadas.has(reg.detalles.competencia);
+            
+            if (matchArea && matchGrado && matchComp) {
+                const m = reg.detalles.tipo_id;
+                Object.entries(reg.puntajes).forEach(([sec, p]) => {
+                    if(seccionesSeleccionadas.size === 0 || seccionesSeleccionadas.has(sec)) {
+                        resumen[m].ad += parseFloat(p.ad); resumen[m].a += parseFloat(p.a);
+                        resumen[m].b += parseFloat(p.b); resumen[m].c += parseFloat(p.c);
+                        resumen[m].total++;
+                    }
+                });
+            }
+        });
+
+        ['diagnostico', 'intermedio', 'salida'].forEach(m => {
+            if(resumen[m].total > 0) {
+                resumen[m].ad /= resumen[m].total; resumen[m].a /= resumen[m].total;
+                resumen[m].b /= resumen[m].total; resumen[m].c /= resumen[m].total;
+            }
+        });
+
+        // Pasamos solo los datos filtrados por seguridad a la vista
+        actualizarVista(resumen, momentoPie, area, dataFiltradaSeguridad);
+    }
+
+    function actualizarVista(resumen, momento, areaFiltro, dataFiltrada) {
+        const inicio = resumen.diagnostico.ad + resumen.diagnostico.a;
+        const final = (resumen.salida.total > 0 ? resumen.salida.ad + resumen.salida.a : resumen.intermedio.ad + resumen.intermedio.a);
+        
+        let dataKPI = resumen.salida.total > 0 ? resumen.salida : (resumen.intermedio.total > 0 ? resumen.intermedio : resumen.diagnostico);
+        if(momento !== 'ALL') dataKPI = resumen[momento];
+
+        // Cambiamos dataOriginal.length por dataFiltrada.length para que el KPI refleje solo lo que el usuario puede ver
+        document.getElementById('kpiTotal').textContent = dataFiltrada.length; 
+        document.getElementById('kpiCrecimiento').textContent = (final - inicio).toFixed(1) + '%';
+        document.getElementById('kpiAlerta').textContent = dataKPI.c.toFixed(1) + '%';
+        
+        const notas = { 'AD': dataKPI.ad, 'A': dataKPI.a, 'B': dataKPI.b, 'C': dataKPI.c };
+        document.getElementById('kpiNivel').textContent = Object.keys(notas).reduce((a, b) => notas[a] > notas[b] ? a : b);
+
+        renderPie(resumen, momento);
+        renderTendencia(resumen);
+        renderAgrupado(resumen);
+        renderRankings(areaFiltro, dataFiltrada);
+        renderRankingsGrados(dataFiltrada);
+    }
+
+    // --- RANKINGS AJUSTADOS PARA USAR SOLO DATA PERMITIDA ---
+    function renderRankingsGrados(dataFiltrada) {
+        const rankings = {};
+        dataFiltrada.forEach(reg => {
+            const grado = reg.detalles.grado;
+            Object.entries(reg.puntajes).forEach(([sec, p]) => {
+                const id = `${grado}° ${sec}`;
+                if (!rankings[id]) rankings[id] = { logro: 0, alerta: 0, count: 0 };
+                rankings[id].logro += (parseFloat(p.ad) + parseFloat(p.a));
+                rankings[id].alerta += parseFloat(p.c);
+                rankings[id].count++;
+            });
+        });
+
+        const listaProcesada = Object.entries(rankings).map(([nombre, val]) => ({
+            nombre,
+            logro: val.logro / val.count,
+            alerta: val.alerta / val.count
+        }));
+
+        const mejores = [...listaProcesada].sort((a, b) => b.logro - a.logro).slice(0, 3);
+        document.getElementById('listaTopMejores').innerHTML = mejores.map((m, i) => `
+            <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
+                <div class="flex items-center gap-3">
+                    <span class="bg-emerald-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black">${i+1}</span>
+                    <span class="text-xs font-bold text-slate-700">${m.nombre}</span>
+                </div>
+                <span class="text-xs font-black text-emerald-600">${m.logro.toFixed(1)}%</span>
+            </div>`).join('');
+
+        const criticos = [...listaProcesada].sort((a, b) => b.alerta - a.alerta).slice(0, 3);
+        document.getElementById('listaTopCriticos').innerHTML = criticos.map((m, i) => `
+            <div class="flex items-center justify-between p-3 bg-red-50 rounded-xl">
+                <div class="flex items-center gap-3">
+                    <span class="bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black">${i+1}</span>
+                    <span class="text-xs font-bold text-slate-700">${m.nombre}</span>
+                </div>
+                <span class="text-xs font-black text-red-600">${m.alerta.toFixed(1)}%</span>
+            </div>`).join('');
+    }
+
+    function renderPie(resumen, momento) {
+        const ctx = document.getElementById('chartPieEntrada').getContext('2d');
+        if(charts.pie) charts.pie.destroy();
+        let dataPie = momento === 'ALL' ? {
+            ad: (resumen.diagnostico.ad + resumen.intermedio.ad + resumen.salida.ad) / 3,
+            a: (resumen.diagnostico.a + resumen.intermedio.a + resumen.salida.a) / 3,
+            b: (resumen.diagnostico.b + resumen.intermedio.b + resumen.salida.b) / 3,
+            c: (resumen.diagnostico.c + resumen.intermedio.c + resumen.salida.c) / 3
+        } : resumen[momento];
+        charts.pie = new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: ['AD', 'A', 'B', 'C'], datasets: [{ data: [dataPie.ad, dataPie.a, dataPie.b, dataPie.c], backgroundColor: [COLORS.ad, COLORS.a, COLORS.b, COLORS.c] }] },
+            options: { maintainAspectRatio: false }
+        });
+    }
+
+    function renderTendencia(data) {
+        const ctx = document.getElementById('chartTendencia').getContext('2d');
+        if(charts.tendencia) charts.tendencia.destroy();
+        charts.tendencia = new Chart(ctx, {
+            type: 'line',
+            data: { labels: ['Ingreso', 'Proceso', 'Salida'], datasets: [{ label: '% Logro A+AD', data: [data.diagnostico.ad+data.diagnostico.a, data.intermedio.ad+data.intermedio.a, data.salida.ad+data.salida.a], borderColor: '#10b981', tension: 0.4, fill: true, backgroundColor: 'rgba(16, 185, 129, 0.05)' }] },
+            options: { maintainAspectRatio: false }
+        });
+    }
+
+    function renderAgrupado(data) {
+        const ctx = document.getElementById('chartAgrupado').getContext('2d');
+        if(charts.agrupado) charts.agrupado.destroy();
+        charts.agrupado = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: ['AD', 'A', 'B', 'C'], datasets: [
+                { label: 'Ingreso', data: [data.diagnostico.ad, data.diagnostico.a, data.diagnostico.b, data.diagnostico.c], backgroundColor: '#1e40af' },
+                { label: 'Proceso', data: [data.intermedio.ad, data.intermedio.a, data.intermedio.b, data.intermedio.c], backgroundColor: '#f97316' },
+                { label: 'Salida', data: [data.salida.ad, data.salida.a, data.salida.b, data.salida.c], backgroundColor: '#94a3b8' }
+            ]},
+            options: { maintainAspectRatio: false }
+        });
+    }
+
+    function renderRankings(areaFiltro, dataFiltrada) {
+        const filtrado = dataFiltrada.filter(d => areaFiltro === 'TODAS' || d.detalles.area === areaFiltro);
+        const criticas = filtrado.map(d => {
+            let c = 0, n = 0;
+            Object.values(d.puntajes).forEach(p => { c += parseFloat(p.c); n++; });
+            return { nombre: d.detalles.competencia, c: c/n };
+        }).sort((a,b) => b.c - a.c).slice(0,4);
+        document.getElementById('listaTopCompetencias').innerHTML = criticas.map(c => `
+            <div class="flex items-center justify-between p-2.5 bg-red-50 rounded-xl border border-red-100">
+                <span class="text-[9px] font-bold text-slate-700 truncate max-w-[70%]">${c.nombre}</span>
+                <span class="text-[11px] font-black text-red-600">${c.c.toFixed(1)}%</span>
+            </div>`).join('');
+    }
+
+    // EVENTOS
+    document.getElementById('fMomento').onchange = aplicarFiltros;
+    document.getElementById('fArea').onchange = () => { compsSeleccionadas.clear(); actualizarChecksYComps(); aplicarFiltros(); };
+    document.getElementById('fGrado').onchange = () => { seccionesSeleccionadas.clear(); actualizarChecksYComps(); aplicarFiltros(); };
+    document.getElementById('btnReset').onclick = () => {
+        document.getElementById('fMomento').value = 'ALL';
+        // Solo resetear área si no es coordinador
+        if (userRoleData && userRoleData.rol !== 'coordinador') {
+            document.getElementById('fArea').value = 'TODAS';
+        }
+        document.getElementById('fGrado').value = 'TODOS';
+        seccionesSeleccionadas.clear(); compsSeleccionadas.clear();
+        actualizarChecksYComps(); aplicarFiltros();
+    };
+
+    document.getElementById('btnPDF').onclick = () => {
+        const element = document.getElementById('reportContent');
+        const opt = {
+            margin: [10, 5],
+            filename: 'Reporte_EVA_Final.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, ignoreElements: (el) => el.classList.contains('no-export') },
+            jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' }
+        };
+        html2pdf().set(opt).from(element).save();
+    };
+
+    document.getElementById('btnLogout').onclick = () => signOut(auth);
+</script>
+</body>
+</html>

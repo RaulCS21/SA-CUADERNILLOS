@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Notas - EVA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        select { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+        .btn-active:active { transform: scale(0.98); }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        .card-evaluacion {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-card { animation: fadeIn 0.4s ease forwards; }
+
+        /* Estilos para el menú móvil */
+        .nav-active .nav-icon-container {
+            background-color: #eef2ff;
+            color: #4f46e5;
+        }
+        .nav-active span {
+            color: #4f46e5;
+        }
+        .nav-inactive {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <nav class="bg-white shadow-sm border-b px-6 py-3 flex justify-between items-center sticky top-0 z-40">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-2">
+                <div class="bg-indigo-600 p-2 rounded-lg">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <span class="font-bold text-gray-800 text-lg tracking-tight">Sistema EVA</span>
+            </div>
+
+            <div class="hidden md:flex items-center gap-6 border-l pl-8">
+                <a href="registros.html" class="text-sm font-black text-indigo-600 border-b-2 border-indigo-600 pb-1">Registros</a>
+                <a href="dashboard.html" class="text-sm font-bold text-slate-400 hover:text-indigo-500 transition-colors">Dashboard</a>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="text-right hidden sm:block">
+                <p id="userName" class="text-sm font-semibold text-gray-700">Cargando...</p>
+                <p id="userRole" class="text-xs text-gray-500 italic">Docente</p>
+            </div>
+            <img id="userPhoto" class="w-10 h-10 rounded-full border border-gray-200 shadow-sm object-cover">
+            <button id="btnLogout" class="p-2 hover:bg-red-50 rounded-full text-red-400 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <main class="p-4 md:p-8 max-w-[1600px] mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
+                    <div class="bg-slate-800 p-6">
+                        <h2 class="text-xl font-bold text-white">Panel de Registro</h2>
+                        <p class="text-slate-400 text-sm">Configure sus registros de evaluación</p>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Momento</label>
+                            <select id="selectTipo" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium">
+                                <option value="">Seleccione tipo...</option>
+                                <option value="diagnostico">Evaluación de Diagnóstico</option>
+                                <option value="intermedio">Evaluación de Proceso</option>
+                                <option value="salida">Evaluación de Salida</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Nivel</label>
+                                <select id="selectNivel" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium">
+                                    <option value="">Nivel...</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Grado</label>
+                                <select id="selectGrado" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium">
+                                    <option value="">Grado...</option>
+                                    <option value="1">1° Grado</option><option value="2">2° Grado</option><option value="3">3° Grado</option>
+                                    <option value="4">4° Grado</option><option value="5">5° Grado</option><option value="6">6° Grado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Cant. Secciones</label>
+                            <select id="selectSecciones" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium">
+                                <option value="">Seleccione...</option>
+                                <option value="1">1 Sección (A)</option>
+                                <option value="2">2 Secciones (A, B)</option>
+                                <option value="3">3 Secciones (A, B, C)</option>
+                                <option value="4">4 Secciones (A, B, C, D)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Área Curricular</label>
+                            <select id="selectArea" disabled class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none disabled:opacity-40 text-sm font-medium">
+                                <option value="">Primero elija nivel...</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Competencia</label>
+                            <select id="selectComp" disabled class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none disabled:opacity-40 text-sm font-medium">
+                                <option value="">Primero elija área...</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-4">
+                            <button id="btnRegistrar" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all btn-active flex items-center justify-center gap-2">
+                                <span>Registrar Evaluación</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-10 custom-scroll max-h-[85vh] overflow-y-auto pr-4">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-2xl font-black text-slate-800 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-indigo-600 rounded-full"></span>
+                        Historial de Evaluaciones
+                    </h3>
+                    <span id="contadorCards" class="text-[10px] font-black bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest">0 Registros</span>
+                </div>
+
+                <div id="sec-diagnostico" class="hidden space-y-6">
+                    <div class="flex items-center gap-4">
+                        <h4 class="text-sm font-black text-slate-400 uppercase tracking-tighter">Evaluación Diagnóstica</h4>
+                        <div class="h-[1px] flex-grow bg-slate-200"></div>
+                    </div>
+                    <div id="cont-diagnostico" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+                </div>
+
+                <div id="sec-intermedio" class="hidden space-y-6">
+                    <div class="flex items-center gap-4">
+                        <h4 class="text-sm font-black text-blue-400 uppercase tracking-tighter">Evaluación de Proceso</h4>
+                        <div class="h-[1px] flex-grow bg-blue-100"></div>
+                    </div>
+                    <div id="cont-intermedio" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+                </div>
+
+                <div id="sec-salida" class="hidden space-y-6">
+                    <div class="flex items-center gap-4">
+                        <h4 class="text-sm font-black text-emerald-400 uppercase tracking-tighter">Evaluación de Salida</h4>
+                        <div class="h-[1px] flex-grow bg-emerald-100"></div>
+                    </div>
+                    <div id="cont-salida" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-3 flex justify-around items-center z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <a href="registros.html" id="mobile-nav-registros" class="flex flex-col items-center gap-1 group">
+            <div class="nav-icon-container p-2 rounded-xl transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Registros</span>
+        </a>
+        <a href="dashboard.html" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 group">
+            <div class="nav-icon-container p-2 rounded-xl transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Dashboard</span>
+        </a>
+    </div>
+    <div class="h-20 md:hidden"></div>
+
+    <div id="modalNotas" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div id="modalNotasContent" class="bg-white w-full max-w-4xl max-h-[90vh] rounded-[3.5rem] shadow-2xl overflow-hidden flex flex-col border-8 border-white transition-all duration-500">
+            <div class="p-10 flex justify-between items-center">
+                <div>
+                    <h3 id="modalTitle" class="text-3xl font-black text-slate-800 uppercase tracking-tight">Cargar Calificaciones</h3>
+                    <p id="modalSubtitle" class="text-sm text-slate-600 font-bold mt-1 opacity-70"></p>
+                </div>
+                <button onclick="cerrarModal('modalNotas')" class="bg-white/50 p-4 rounded-full hover:bg-white shadow-sm transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modalBody" class="px-10 pb-10 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            <div class="p-8 bg-white/30 backdrop-blur-md flex justify-end gap-4 border-t border-white/20">
+                <button onclick="cerrarModal('modalNotas')" class="px-8 py-3 text-slate-600 font-bold">Cancelar</button>
+                <button id="btnGuardarDatos" class="px-12 py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl hover:bg-black transition-all">Finalizar Registro</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalDetalles" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div id="modalDetallesContent" class="bg-white w-full max-w-2xl max-h-[85vh] rounded-[3.5rem] shadow-2xl overflow-hidden flex flex-col border-8 border-white transition-all duration-500">
+            <div class="p-10">
+                <div class="flex justify-between items-start">
+                    <div class="max-w-[80%]">
+                        <h3 class="text-3xl font-black text-slate-800 uppercase leading-none">Resultados</h3>
+                        <p id="detallesSubtitulo" class="text-sm font-bold mt-3 text-slate-600 opacity-80 leading-relaxed"></p>
+                    </div>
+                    <button onclick="cerrarModal('modalDetalles')" class="bg-white/50 p-3 rounded-full">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="detallesBody" class="px-10 pb-10 overflow-y-auto space-y-4"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, get, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDwh4DIzzxRyPPzMxCZaIGcdywo-8_h5rk",
+            authDomain: "eva-estudiantes.firebaseapp.com",
+            databaseURL: "https://eva-estudiantes-default-rtdb.firebaseio.com",
+            projectId: "eva-estudiantes",
+            storageBucket: "eva-estudiantes.firebasestorage.app",
+            messagingSenderId: "692305850400",
+            appId: "1:692305850400:web:2b15a925a9669438ad8c45"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        let dataGlobal = null;
+        let registrosLocales = {};
+        const letras = ["A", "B", "C", "D"];
+
+        const COLOR_MAP = {
+            'MATEMÁTICA': { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200', intense: '#3b82f6', light: '#eff6ff' },
+            'COMUNICACIÓN': { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200', intense: '#ef4444', light: '#fef2f2' },
+            'CIENCIA Y TECNOLOGÍA': { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200', intense: '#22c55e', light: '#f0fdf4' },
+            'PERSONAL SOCIAL': { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200', intense: '#f59e0b', light: '#fffbeb' },
+            'DEFAULT': { bg: 'bg-indigo-50', text: 'text-indigo-600', border: 'border-indigo-200', intense: '#6366f1', light: '#f8faff' }
+        };
+
+        const getAreaStyle = (areaName) => {
+            const name = areaName?.toUpperCase() || '';
+            if (name.includes('MATEM')) return COLOR_MAP['MATEMÁTICA'];
+            if (name.includes('COMUNIC')) return COLOR_MAP['COMUNICACIÓN'];
+            if (name.includes('CIENCIA')) return COLOR_MAP['CIENCIA Y TECNOLOGÍA'];
+            if (name.includes('PERSONAL')) return COLOR_MAP['PERSONAL SOCIAL'];
+            return COLOR_MAP['DEFAULT'];
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('userName').textContent = user.displayName || "Docente";
+                document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
+                cargarEstructura();
+                cargarHistorial();
+                activarMenuMovil();
+            } else { window.location.href = 'index.html'; }
+        });
+
+        async function cargarEstructura() {
+            const snapshot = await get(ref(db, 'niveles'));
+            if (snapshot.exists()) {
+                dataGlobal = snapshot.val();
+                llenarNiveles();
+            }
+        }
+
+        function llenarNiveles() {
+            const select = document.getElementById('selectNivel');
+            select.innerHTML = '<option value="">Nivel...</option>';
+            Object.keys(dataGlobal).forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key; opt.textContent = dataGlobal[key].nombre;
+                select.appendChild(opt);
+            });
+        }
+
+        function cargarHistorial() {
+            onValue(ref(db, 'registros_notas'), (snapshot) => {
+                const conts = {
+                    diagnostico: document.getElementById('cont-diagnostico'),
+                    intermedio: document.getElementById('cont-intermedio'),
+                    salida: document.getElementById('cont-salida')
+                };
+                const secs = {
+                    diagnostico: document.getElementById('sec-diagnostico'),
+                    intermedio: document.getElementById('sec-intermedio'),
+                    salida: document.getElementById('sec-salida')
+                };
+
+                Object.values(conts).forEach(c => c.innerHTML = '');
+                Object.values(secs).forEach(s => s.classList.add('hidden'));
+
+                if (snapshot.exists()) {
+                    registrosLocales = snapshot.val();
+                    const keys = Object.keys(registrosLocales).reverse();
+                    document.getElementById('contadorCards').textContent = `${keys.length} Registros`;
+
+                    keys.forEach(key => {
+                        const data = registrosLocales[key];
+                        const tipo = data.detalles.tipo_id;
+                        if (conts[tipo]) {
+                            secs[tipo].classList.remove('hidden');
+                            renderizarCard(data, key, conts[tipo]);
+                        }
+                    });
+                } else {
+                    document.getElementById('contadorCards').textContent = `0 Registros`;
+                }
+            });
+        }
+
+        function renderizarCard(data, key, contenedor) {
+            const style = getAreaStyle(data.detalles.area);
+            const card = document.createElement('div');
+            card.className = `card-evaluacion bg-white p-6 rounded-[2.5rem] border-2 ${style.border} shadow-sm hover:shadow-xl transition-all relative group overflow-hidden animate-card`;
+            
+            card.innerHTML = `
+                <div class="absolute left-0 top-0 bottom-0 w-2" style="background-color: ${style.intense}"></div>
+                <div class="flex justify-between items-start ml-2">
+                    <span class="${style.bg} ${style.text} text-[10px] font-black px-3 py-1 rounded-full uppercase border ${style.border}">
+                        ${data.detalles.grado}° - ${data.detalles.nivel}
+                    </span>
+                    <div class="flex gap-2">
+                        <button onclick="window.verDetalles('${key}')" class="p-2 bg-slate-100 text-slate-600 rounded-full hover:scale-110 transition-all shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-width="3" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </button>
+                        <button onclick="window.eliminarRegistro('${key}')" class="p-2 bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-grow flex flex-col justify-center py-4 ml-2">
+                    <p class="${style.text} text-[11px] font-black uppercase tracking-widest mb-1">${data.detalles.area}</p>
+                    <div class="${style.bg} p-5 rounded-3xl border border-dashed ${style.border}">
+                        <p class="text-sm font-bold text-slate-700 leading-snug italic text-center">"${data.detalles.competencia}"</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-slate-50 ml-2">
+                    <span class="text-[10px] text-slate-400 font-bold">${new Date(data.fechaRegistro).toLocaleDateString()}</span>
+                    <div class="flex -space-x-2">
+                        ${Object.keys(data.puntajes).map(l => `<div class="w-8 h-8 rounded-full text-white text-[10px] flex items-center justify-center border-2 border-white font-bold" style="background-color: ${style.intense}">${l}</div>`).join('')}
+                    </div>
+                </div>`;
+            contenedor.appendChild(card);
+        }
+
+        // EVENTOS DE SELECTS
+// Ya no necesitas llenarNiveles() porque ya están en el HTML
+
+    document.getElementById('selectNivel').addEventListener('change', (e) => {
+        const nivelSeleccionado = e.target.value; // "primaria" o "secundaria"
+        const selectArea = document.getElementById('selectArea');
+        const selectComp = document.getElementById('selectComp');
+
+        // Limpiamos áreas y competencias
+        selectArea.innerHTML = '<option value="">Cargando áreas...</option>';
+        selectComp.innerHTML = '<option value="">Primero elija área...</option>';
+        selectComp.disabled = true;
+
+        if (nivelSeleccionado && dataGlobal[nivelSeleccionado]) {
+            const nivelData = dataGlobal[nivelSeleccionado];
+            
+            selectArea.innerHTML = '<option value="">Seleccione Área...</option>';
+            
+            // Cargamos las áreas desde Firebase usando la clave (primaria/secundaria)
+            Object.keys(nivelData.areas).forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = k;
+                opt.textContent = nivelData.areas[k].nombre;
+                selectArea.appendChild(opt);
+            });
+            
+            selectArea.disabled = false;
+        } else {
+            selectArea.innerHTML = '<option value="">Primero elija nivel...</option>';
+            selectArea.disabled = true;
+        }
+    });
+
+        document.getElementById('selectArea').addEventListener('change', (e) => {
+            const selectComp = document.getElementById('selectComp');
+            selectComp.innerHTML = '<option value="">Competencia...</option>';
+            const nivelKey = document.getElementById('selectNivel').value;
+            if (nivelKey && e.target.value) {
+                const competencias = dataGlobal[nivelKey].areas[e.target.value].competencias;
+                Object.keys(competencias).forEach(k => {
+                    const opt = document.createElement('option'); opt.value = k;
+                    opt.textContent = competencias[k].descripcion;
+                    selectComp.appendChild(opt);
+                });
+                selectComp.disabled = false;
+            }
+        });
+
+        // REGISTRO Y MODAL
+        document.getElementById('btnRegistrar').addEventListener('click', () => {
+            const areaSelect = document.getElementById('selectArea');
+            const tipo = document.getElementById('selectTipo').value;
+            if(!areaSelect.value || !tipo) return alert("Complete los campos requeridos (Momento y Área)");
+
+            const style = getAreaStyle(areaSelect.options[areaSelect.selectedIndex].text);
+            const secciones = parseInt(document.getElementById('selectSecciones').value) || 1;
+            
+            document.getElementById('modalNotasContent').style.backgroundColor = style.light;
+            document.getElementById('modalSubtitle').textContent = document.getElementById('selectComp').options[document.getElementById('selectComp').selectedIndex].text;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = '';
+
+            for (let i = 0; i < secciones; i++) {
+                const letra = letras[i];
+                modalBody.innerHTML += `
+                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm section-card" data-letra="${letra}">
+                        <div class="flex items-center gap-2 mb-6">
+                            <span class="text-white font-black px-4 py-1.5 rounded-2xl text-[10px] uppercase tracking-widest" style="background-color: ${style.intense}">Sección ${letra}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-5">
+                            ${['AD', 'A', 'B', 'C'].map(n => `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase ml-1">Nota ${n} (%)</label>
+                                    <input type="number" step="0.01" value="0" class="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-slate-200 rounded-3xl text-xl font-black outline-none transition-all">
+                                </div>`).join('')}
+                        </div>
+                    </div>`;
+            }
+            document.getElementById('modalNotas').classList.remove('hidden');
+        });
+
+        document.getElementById('btnGuardarDatos').addEventListener('click', async () => {
+            const resultados = {};
+            document.querySelectorAll('.section-card').forEach(t => {
+                const inputs = t.querySelectorAll('input');
+                resultados[t.dataset.letra] = { 
+                    ad: inputs[0].value || 0, a: inputs[1].value || 0, 
+                    b: inputs[2].value || 0, c: inputs[3].value || 0 
+                };
+            });
+
+            const payload = {
+                fechaRegistro: new Date().toISOString(),
+                usuario: auth.currentUser.email,
+                detalles: {
+                    tipo_id: document.getElementById('selectTipo').value,
+                    nivel: document.getElementById('selectNivel').options[document.getElementById('selectNivel').selectedIndex].text,
+                    grado: document.getElementById('selectGrado').value,
+                    area: document.getElementById('selectArea').options[document.getElementById('selectArea').selectedIndex].text,
+                    competencia: document.getElementById('selectComp').options[document.getElementById('selectComp').selectedIndex].text
+                },
+                puntajes: resultados
+            };
+
+            await push(ref(db, 'registros_notas'), payload);
+            cerrarModal('modalNotas');
+        });
+
+        // FUNCIONES GLOBALES
+        window.verDetalles = (key) => {
+            const data = registrosLocales[key];
+            const style = getAreaStyle(data.detalles.area);
+            const modal = document.getElementById('modalDetallesContent');
+            modal.style.backgroundColor = style.light;
+            document.getElementById('detallesSubtitulo').textContent = data.detalles.competencia;
+            const container = document.getElementById('detallesBody');
+            container.innerHTML = '';
+
+            Object.entries(data.puntajes).forEach(([seccion, notas]) => {
+                container.innerHTML += `
+                    <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-white">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-3 h-6 rounded-full" style="background-color: ${style.intense}"></span>
+                            <span class="font-black text-slate-800 text-lg">SECCIÓN ${seccion}</span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-3">
+                            ${Object.entries(notas).map(([nota, valor]) => `
+                                <div class="text-center p-3 rounded-2xl border" style="background-color: ${style.light}; border-color: ${style.intense}20">
+                                    <p class="text-[10px] font-black uppercase mb-1" style="color: ${style.intense}">${nota}</p>
+                                    <p class="text-xl font-black text-slate-800">${valor}%</p>
+                                </div>`).join('')}
+                        </div>
+                    </div>`;
+            });
+            document.getElementById('modalDetalles').classList.remove('hidden');
+        };
+
+        window.eliminarRegistro = async (key) => {
+            if (confirm("¿Está seguro de que desea eliminar este registro?")) {
+                await remove(ref(db, `registros_notas/${key}`));
+            }
+        };
+
+        window.cerrarModal = (id) => document.getElementById(id).classList.add('hidden');
+
+        function activarMenuMovil() {
+            const path = window.location.pathname;
+            const btnRegistros = document.getElementById('mobile-nav-registros');
+            const btnDashboard = document.getElementById('mobile-nav-dashboard');
+            if (path.includes('registros.html') || path.endsWith('/')) {
+                btnRegistros.classList.add('nav-active');
+                btnDashboard.classList.add('nav-inactive');
+            } else if (path.includes('dashboard.html')) {
+                btnDashboard.classList.add('nav-active');
+                btnRegistros.classList.add('nav-inactive');
+            }
+        }
+
+        document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
+    </script>
+</body>
+</html>
