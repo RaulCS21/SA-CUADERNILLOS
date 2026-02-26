@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuadernillo Digital - Informática 4to Primaria</title>
+    <style>
+        /* Paleta de Colores Institucional */
+        :root {
+            --primario: #2c2fc8; /* Azul profundo */
+            --secundario: #ffa733; /* Naranja */
+            --exito: #2ecc71; /* Verde lima */
+            --fondo-suave: #f4f7f6;
+            --blanco: #ffffff;
+            --texto: #1a1a1a;
+            --gris-borde: #dddddd;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            background-color: #e5e7e9;
+            background-image: radial-gradient(#d5d8dc 1px, transparent 1px);
+            background-size: 25px 25px;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 30px 10px;
+            color: var(--texto);
+            line-height: 1.6;
+        }
+
+        .cuadernillo-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--blanco);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+            border: 1px solid var(--gris-borde);
+        }
+
+        /* Encabezado */
+        .header-principal {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 40px;
+            background: var(--blanco);
+            border-bottom: 6px solid var(--secundario);
+        }
+
+        .logo-box {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .titulo-central {
+            text-align: center;
+            flex: 1;
+            padding: 0 15px;
+        }
+
+        .eda-tag {
+            color: var(--primario);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .sesion-titulo {
+            color: var(--texto);
+            font-size: 22px;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        /* Barra Informativa */
+        .info-bar {
+            background: var(--primario);
+            color: var(--blanco);
+            padding: 12px 40px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 4px solid #f1c40f;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        /* Tarjetas de Contenido */
+        .card {
+            background: var(--blanco);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 6px solid var(--primario);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: var(--primario);
+            font-size: 19px;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .propósito-destacado {
+            background: #fff9c4;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px dashed var(--secundario);
+            font-weight: 500;
+        }
+
+        /* Desarrollo Conceptual */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .concept-item {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .bg-publisher { background-color: #077568; }
+        .bg-canva { background-color: #00c4cc; }
+        .bg-diagnostico { background-color: #5e35b1; }
+
+        /* Actividades */
+        .pasos-lista {
+            background: var(--fondo-suave);
+            padding: 20px;
+            border-radius: 10px;
+            list-style: none;
+        }
+
+        .pasos-lista li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .numero-paso {
+            background: var(--secundario);
+            color: white;
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Criterios de Evaluación */
+        .criterios-card {
+            background: #e8f5e9;
+            border-left: 6px solid var(--exito);
+        }
+
+        .criterio-item {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .criterio-punto {
+            color: var(--exito);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer-digital {
+            background: #212121;
+            color: #bdc3c7;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        .tarea-moodle {
+            border: 2px solid #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            background: #fdf2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cuadernillo-container">
+        <header class="header-principal">
+            <img src="https://lh3.googleusercontent.com/u/0/d/1GX5W8pE8TTsbgRv15qyYIDfzaKYCe0pV" alt="Institución" class="logo-box">
+            
+            <div class="titulo-central">
+                <div class="eda-tag">EdA 1: Participamos con responsabilidad para convivir en armonía</div>
+                <h1 class="sesion-titulo">Evaluamos nuestros saberes previos en tecnología</h1>
+            </div>
+
+            <img src="https://lh3.googleusercontent.com/u/0/d/1v-j_GZVH9EDYyo4eLXHzbozjvoZUXQaz" alt="Tecnología" class="logo-box">
+        </header>
+
+        <div class="info-bar">
+            <span><strong>Curso:</strong> Informática</span>
+            <span><strong>Grado:</strong> 4to de Primaria</span>
+            <span><strong>Semana:</strong> 01</span>
+        </div>
+
+        <div class="main-content">
+            
+            <div class="card">
+                <h2>Nuestro Propósito de Aprendizaje</h2>
+                <div class="propósito-destacado">
+                    Hoy vamos a demostrar lo que sabemos usar en la computadora. Realizaremos tareas sencillas y completaremos un formulario para ver cuánto recordamos sobre herramientas como Publisher y Canva.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>¿Qué herramientas exploraremos este año?</h2>
+                <p>En este grado, aprenderemos a crear diseños asombrosos. Pero antes, necesitamos saber qué herramientas ya conoces. Aquí te presentamos las principales que evaluaremos hoy:</p>
+                
+                <div class="concept-grid">
+                    <div class="concept-item bg-publisher">
+                        Microsoft Publisher<br>(Diseño de impresos)
+                    </div>
+                    <div class="concept-item bg-canva">
+                        Canva<br>(Diseño Creativo)
+                    </div>
+                    <div class="concept-item bg-diagnostico">
+                        Formularios<br>(Prueba diagnóstica)
+                    </div>
+                </div>
+                <p>Recordemos que la tecnología es una herramienta que nos ayuda a expresar nuestras ideas con responsabilidad y respeto hacia los demás.</p>
+            </div>
+
+            <div class="card">
+                <h2>Ejemplo de Tarea Diagnóstica</h2>
+                <p>Imagina que quieres invitar a tus amigos a una campaña de limpieza en el colegio. Para saber qué herramienta usar, primero evaluamos si puedes:</p>
+                <ul style="color: #555;">
+                    <li>Encender y entrar a tu sesión de usuario de forma correcta.</li>
+                    <li>Abrir un navegador de internet (como Google Chrome o Edge).</li>
+                    <li>Escribir tus nombres y apellidos completos sin errores en un teclado.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Actividad en el Aula: El Reto Diagnóstico</h2>
+                <div class="pasos-lista">
+                    <div class="criterio-item">
+                        <span class="numero-paso">1</span>
+                        <span>Ingresa a tu computadora con tu usuario y contraseña.</span>
+                    </div>
+                    <div class="criterio-item">
+                        <span class="numero-paso">2</span>
+                        <span>Abre el enlace del formulario de diagnóstico que el profesor compartirá.</span>
+                    </div>
+                    <div class="criterio-item">
+                        <span class="numero-paso">3</span>
+                        <span>Responde con sinceridad cada pregunta sobre el uso de Publisher y Canva.</span>
+                    </div>
+                    <div class="criterio-item">
+                        <span class="numero-paso">4</span>
+                        <span>Realiza la pequeña prueba de dibujo digital que se te indicará en pantalla.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card criterios-card">
+                <h2 style="color: var(--exito); border-bottom-color: var(--exito);">¿Qué evaluaremos hoy?</h2>
+                <div class="criterio-item">
+                    <span class="criterio-punto">✔</span>
+                    <span><strong>Comprensión:</strong> Describe conceptos básicos de tecnología en la evaluación.</span>
+                </div>
+                <div class="criterio-item">
+                    <span class="criterio-punto">✔</span>
+                    <span><strong>Identificación:</strong> Reconoce problemas tecnológicos comunes en su entorno.</span>
+                </div>
+                <div class="criterio-item">
+                    <span class="criterio-punto">✔</span>
+                    <span><strong>Habilidad:</strong> Ejecuta tareas básicas de encendido, manejo de mouse y teclado.</span>
+                </div>
+                <div class="criterio-item">
+                    <span class="criterio-punto">✔</span>
+                    <span><strong>Responsabilidad:</strong> Entrega su evaluación diagnóstica de forma oportuna.</span>
+                </div>
+            </div>
+
+            <div class="card" style="border-left-color: #e74c3c;">
+                <h2 style="color: #e74c3c;">Actividad para Casa</h2>
+                <div class="tarea-moodle">
+                    <p>Ingresa al recurso <strong>TAREA</strong> en Moodle y responde:</p>
+                    <p><strong>¿Qué meta te gustaría alcanzar en el curso de Informática este año?</strong> (Ejemplo: "Quiero aprender a hacer mis propios afiches en Canva").</p>
+                </div>
+            </div>
+
+            <div class="card" style="border-left: none; text-align: center; background: #f9f9f9;">
+                <p><i>"Tus conocimientos actuales son el punto de partida para grandes creaciones digitales. ¡Esforcémonos juntos!"</i></p>
+            </div>
+
+        </div>
+
+        <footer class="footer-digital">
+            © 2026 Cuadernillo Digital de Informática | Sesión de Diagnóstico 4to Grado
+        </footer>
+    </div>
+
+</body>
+</html>
