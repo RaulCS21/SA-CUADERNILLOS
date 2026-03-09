@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robótica Creativa 1° - Corregido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Outfit:wght@700;900&display=swap');
+        
+        body { font-family: 'Fredoka', sans-serif; overflow: hidden; background: #f0f4f8; }
+        .font-title { font-family: 'Outfit', sans-serif; }
+        
+        /* Sistema de Sliders */
+        .slide { 
+            display: none; height: 100vh; width: 100%; 
+            position: absolute; top: 0; left: 0;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .slide.active { display: flex; animation: slideIn 0.5s ease-out forwards; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Flechas Pro Muy Visibles */
+        .nav-arrow {
+            position: fixed; top: 50%; transform: translateY(-50%); z-index: 100;
+            width: 75px; height: 75px; border-radius: 50%;
+            background: #6366f1; color: white; font-size: 2rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid white;
+        }
+        .nav-arrow:hover { background: #4f46e5; transform: translateY(-50%) scale(1.15); cursor: pointer; }
+        .nav-arrow.disabled { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
+
+        .card-eco {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 3rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1; transition: all 0.3s; cursor: pointer; }
+        .dot.active { width: 35px; border-radius: 10px; background: #6366f1; }
+
+        strong { color: #4f46e5; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .nav-arrow { width: 55px; height: 55px; bottom: 30px; top: auto; transform: none; }
+            #nextBtn { right: 20px; } #prevBtn { left: 20px; }
+            .slide { padding: 15px; overflow-y: auto; }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <button id="prevBtn" onclick="prevSlide()" class="nav-arrow left-4 md:left-10"><i class="fas fa-arrow-left"></i></button>
+    <button id="nextBtn" onclick="nextSlide()" class="nav-arrow right-4 md:right-10"><i class="fas fa-arrow-right"></i></button>
+
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-3" id="dotContainer"></div>
+
+    <main>
+        <section class="slide active" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+            <div class="text-center text-white p-6">
+                <div class="relative inline-block">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" class="w-48 mx-auto mb-8 drop-shadow-2xl animate-bounce" alt="Robot Icon">
+                </div>
+                <h1 class="text-6xl md:text-9xl font-title font-black mb-4 tracking-tighter uppercase">Robótica<br><span class="text-yellow-400">Creativa</span></h1>
+                <p class="text-2xl font-light opacity-90 tracking-wide">¡Tu imaginación es el único motor!</p>
+                <div class="mt-8 bg-white/20 backdrop-blur-md px-8 py-2 rounded-full inline-block border border-white/30 font-bold">1° AÑO DE SECUNDARIA</div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #ffffff;">
+            <div class="max-w-6xl w-full flex flex-col md:flex-row gap-12 items-center px-6">
+                <div class="md:w-1/2">
+                    <h2 class="text-5xl font-title font-black text-indigo-900 mb-8 leading-none">Nuestro Gran<br>Objetivo</h2>
+                    <p class="text-2xl text-slate-600 leading-relaxed">
+                        Queremos que seas un <strong>inventor real</strong>. Aprenderás a usar la <strong>creatividad</strong>, transformar <strong>materiales reciclados</strong> y dominar el <strong>diseño digital</strong> para crear soluciones.
+                    </p>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="absolute -top-4 -left-4 w-full h-full border-4 border-yellow-400 rounded-[3rem]"></div>
+                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800" class="relative rounded-[3rem] shadow-2xl" alt="Mesa de trabajo">
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #eef2ff;">
+            <div class="max-w-5xl text-center px-6">
+                <div class="mb-6 inline-block bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold uppercase tracking-widest text-sm">Paso 1: El Cerebro Digital</div>
+                <h2 class="text-5xl font-title font-black text-slate-900 mb-8">Diseño en Tinkercad</h2>
+                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1000" class="w-full h-96 object-cover rounded-[4rem] shadow-2xl border-8 border-white" alt="Diseño 3D">
+                <p class="mt-10 text-2xl text-slate-700 max-w-3xl mx-auto">
+                    Antes de tocar una sola tijera, creamos nuestros modelos en <strong>3D</strong> y probamos circuitos electrónicos de forma segura.
+                </p>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #0f172a;">
+            <div class="max-w-6xl w-full grid md:grid-cols-2 gap-8 px-6">
+                <div class="card-eco p-12 border-b-8 border-green-500">
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="text-3xl font-black mb-4 text-slate-900">Eco-Estructuras</h3>
+                    <p class="text-slate-600 text-xl leading-relaxed">
+                        Damos una segunda vida al cartón, botellas y plásticos para construir el cuerpo de nuestros prototipos.
+                    </p>
+                </div>
+                <div class="card-eco p-12 border-b-8 border-yellow-500">
+                    <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="text-3xl font-black mb-4 text-slate-900">Energía Real</h3>
+                    <p class="text-slate-600 text-xl leading-relaxed">
+                        Aprendemos a conectar <strong>motores DC</strong> y baterías para que nuestras creaciones cobren vida.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #ffffff;">
+            <div class="max-w-5xl w-full px-6 text-center">
+                <h2 class="text-5xl font-title font-black text-indigo-600 mb-12">¿Qué Aprenderás Hoy?</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-100 hover:border-indigo-500 transition-all">
+                        <div class="text-3xl mb-4">🔍</div>
+                        <h4 class="font-bold text-sm uppercase">Plantea Problemas</h4>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-100 hover:border-indigo-500 transition-all">
+                        <div class="text-3xl mb-4">✍️</div>
+                        <h4 class="font-bold text-sm uppercase">Diseña Soluciones</h4>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-100 hover:border-indigo-500 transition-all">
+                        <div class="text-3xl mb-4">🛠️</div>
+                        <h4 class="font-bold text-sm uppercase">Construye Prototipos</h4>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-3xl border-2 border-slate-100 hover:border-indigo-500 transition-all">
+                        <div class="text-3xl mb-4">📢</div>
+                        <h4 class="font-bold text-sm uppercase">Comunica Ideas</h4>
+                    </div>
+                </div>
+                <div class="mt-12 p-8 bg-indigo-50 rounded-[2rem] border-2 border-dashed border-indigo-200">
+                    <p class="text-xl italic text-indigo-800">"Diseña y produce prototipos tecnológicos para resolver problemas de su entorno"</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1600') center/cover;">
+            <div class="max-w-4xl text-center px-6 text-white">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfI3iE8oO1t7uPZid33i6vG7u6aW2z4R6D0A&s" class="w-32 h-32 rounded-full border-4 border-yellow-400 mx-auto mb-8 shadow-2xl object-cover" alt="Madre Eduviges">
+                <p class="text-3xl md:text-5xl italic font-serif leading-tight mb-8">
+                    "Cada una de las acciones hechas con amor y abnegación aumenta la caridad y fortifica las buenas costumbres"
+                </p>
+                <div class="h-1.5 w-24 bg-yellow-400 mx-auto mb-6 rounded-full shadow-[0_0_15px_rgba(250,204,21,0.8)]"></div>
+                <h4 class="text-2xl font-black tracking-widest uppercase">— Madre Eduviges Portalet —</h4>
+                <div class="mt-12">
+                    <button onclick="goToSlide(0)" class="bg-yellow-400 text-indigo-900 font-black py-5 px-12 rounded-full hover:bg-white hover:scale-110 transition-all shadow-2xl uppercase tracking-tighter">
+                        Volver al Inicio
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotContainer = document.getElementById('dotContainer');
+
+        // Generar puntos de navegación interactivos
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotContainer.appendChild(dot);
+        });
+
+        function updateSlider() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                dotContainer.children[index].classList.remove('active');
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                    dotContainer.children[index].classList.add('active');
+                }
+            });
+
+            // Lógica de flechas: ocultar si no hay más
+            prevBtn.classList.toggle('disabled', currentSlide === 0);
+            nextBtn.classList.toggle('disabled', currentSlide === slides.length - 1);
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateSlider(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlider(); } }
+        function goToSlide(index) { currentSlide = index; updateSlider(); }
+
+        // Atajos de teclado
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "ArrowRight") nextSlide();
+            if(e.key === "ArrowLeft") prevSlide();
+        });
+
+        updateSlider();
+    </script>
+</body>
+</html>

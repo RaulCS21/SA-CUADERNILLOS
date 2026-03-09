@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robótica 2.0 - 2do Secundaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Outfit:wght@400;700;900&display=swap');
+        
+        body { font-family: 'Outfit', sans-serif; overflow: hidden; background: #020617; }
+        .font-code { font-family: 'Fira Code', monospace; }
+        
+        /* Sistema de Sliders */
+        .slide { 
+            display: none; height: 100vh; width: 100%; 
+            position: absolute; top: 0; left: 0;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .slide.active { display: flex; animation: slideReveal 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        
+        @keyframes slideReveal {
+            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* Flechas de Navegación Impactantes */
+        .nav-btn {
+            position: fixed; top: 50%; transform: translateY(-50%); z-index: 100;
+            width: 75px; height: 75px; border-radius: 50%;
+            background: #3b82f6; border: 4px solid white;
+            color: white; font-size: 2rem; display: flex;
+            align-items: center; justify-content: center;
+            transition: all 0.3s; box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+        }
+        .nav-btn:hover { background: #1d4ed8; transform: translateY(-50%) scale(1.15); cursor: pointer; }
+        .nav-btn.disabled { opacity: 0.1; cursor: not-allowed; filter: grayscale(1); }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3rem;
+        }
+
+        .dot { width: 40px; height: 6px; border-radius: 10px; background: rgba(255,255,255,0.2); transition: all 0.4s; }
+        .dot.active { background: #3b82f6; box-shadow: 0 0 15px #3b82f6; }
+
+        strong { color: #60a5fa; font-weight: 700; }
+
+        @media (max-width: 768px) {
+            .nav-btn { width: 55px; height: 55px; bottom: 30px; top: auto; transform: none; }
+            #nextBtn { right: 20px; } #prevBtn { left: 20px; }
+            .slide { padding: 10px; overflow-y: auto; }
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <button id="prevBtn" onclick="prevSlide()" class="nav-btn left-6 md:left-10"><i class="fas fa-chevron-left"></i></button>
+    <button id="nextBtn" onclick="nextSlide()" class="nav-btn right-6 md:right-10"><i class="fas fa-chevron-right"></i></button>
+
+    <div class="fixed top-8 left-1/2 -translate-x-1/2 z-50 flex gap-3" id="dotContainer"></div>
+
+    <main>
+        <section class="slide active" style="background: radial-gradient(circle at center, #1e3a8a 0%, #020617 100%);">
+            <div class="text-center px-6">
+                <div class="mb-6 inline-block bg-blue-500/20 text-blue-400 px-6 py-2 rounded-full font-bold tracking-widest border border-blue-500/30">NIVEL INTERMEDIO • 2DO SECUNDARIA</div>
+                <h1 class="text-6xl md:text-9xl font-black mb-4 tracking-tighter">CÓDIGO &<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">CREATIVIDAD</span></h1>
+                <p class="text-xl md:text-2xl text-slate-400 font-code tracking-wider">if (ideas == ∞) { build_robot(); }</p>
+            </div>
+        </section>
+
+        <section class="slide bg-slate-950">
+            <div class="glass-panel max-w-6xl w-full grid md:grid-cols-2 gap-0 overflow-hidden shadow-2xl">
+                <div class="p-12 flex flex-col justify-center">
+                    <h2 class="text-4xl font-bold mb-6 text-blue-400">Dar Inteligencia</h2>
+                    <p class="text-xl text-slate-300 leading-relaxed">
+                        Este año pasamos de mover motores a <strong>darles lógica</strong>. Usaremos el <strong>Lenguaje C</strong> para programar microcontroladores en Tinkercad, resolviendo problemas reales con materiales de reciclaje.
+                    </p>
+                    <div class="mt-8 p-6 bg-black/40 border-l-4 border-emerald-500 rounded-r-2xl font-code text-emerald-400 text-sm">
+                        void loop() { <br>
+                        &nbsp;&nbsp;if (distancia < 10) { <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;detenerRobot(); <br>
+                        &nbsp;&nbsp;} <br>
+                        }
+                    </div>
+                </div>
+                <div class="relative min-h-[300px]">
+                    <img src="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Programming">
+                </div>
+            </div>
+        </section>
+
+        <section class="slide bg-slate-900">
+            <div class="max-w-6xl w-full px-6">
+                <h2 class="text-4xl font-bold text-center mb-12">Nuestra Metodología</h2>
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="p-8 bg-blue-600/10 border border-blue-500/30 rounded-[3rem] text-center group">
+                        <i class="fas fa-terminal text-5xl text-blue-500 mb-6"></i>
+                        <h3 class="text-2xl font-bold mb-4 uppercase">Simulación C</h3>
+                        <p class="text-slate-400 mb-6">Escribimos código real para controlar sensores y actuadores en <strong>Tinkercad</strong>.</p>
+                        <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&q=80&w=600" class="rounded-2xl h-48 w-full object-cover grayscale group-hover:grayscale-0 transition duration-500" alt="Code">
+                    </div>
+                    <div class="p-8 bg-emerald-600/10 border border-emerald-500/30 rounded-[3rem] text-center group">
+                        <i class="fas fa-recycle text-5xl text-emerald-500 mb-6"></i>
+                        <h3 class="text-2xl font-bold mb-4 uppercase">Física Creativa</h3>
+                        <p class="text-slate-400 mb-6">Llevamos el código a prototipos construidos con materiales <strong>reciclados</strong>.</p>
+                        <img src="https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=80&w=600" class="rounded-2xl h-48 w-full object-cover grayscale group-hover:grayscale-0 transition duration-500" alt="Robot">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide bg-black">
+            <div class="max-w-4xl w-full text-center px-6">
+                <h2 class="text-blue-500 font-bold mb-4 uppercase tracking-widest">Metas del Área</h2>
+                <p class="text-2xl italic mb-12 text-slate-300">"Diseña y produce prototipos tecnológicos para resolver problemas de su entorno"</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="showInfo('Plantea Problemas', 'Analizamos retos tecnológicos y definimos cómo la programación puede solucionarlos.')" class="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-blue-600 transition-all text-left group">
+                        <span class="text-blue-500 group-hover:text-white font-bold">01.</span> Plantea Problemas
+                    </button>
+                    <button onclick="showInfo('Diseña Alternativas', 'Creamos esquemas en Tinkercad y diagramas de flujo para nuestro código.')" class="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-blue-600 transition-all text-left group">
+                        <span class="text-blue-500 group-hover:text-white font-bold">02.</span> Diseña Alternativas
+                    </button>
+                    <button onclick="showInfo('Implementa y Valida', 'Escribimos código en C y construimos el robot físico con materiales reciclados.')" class="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-blue-600 transition-all text-left group">
+                        <span class="text-blue-500 group-hover:text-white font-bold">03.</span> Implementa y Valida
+                    </button>
+                    <button onclick="showInfo('Evalúa y Comunica', 'Probamos la eficiencia del algoritmo y explicamos el funcionamiento a los demás.')" class="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-blue-600 transition-all text-left group">
+                        <span class="text-blue-500 group-hover:text-white font-bold">04.</span> Evalúa y Comunica
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide bg-slate-950">
+            <div class="max-w-6xl w-full px-6">
+                <h2 class="text-center text-3xl font-bold mb-10 uppercase tracking-widest">¿Por qué este nivel?</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-6 rounded-3xl bg-blue-500/10 border border-blue-500/20 text-center">
+                        <i class="fas fa-brain text-blue-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Lógica C</p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 text-center">
+                        <i class="fas fa-microchip text-emerald-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Hardware Real</p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-pink-500/10 border border-pink-500/20 text-center">
+                        <i class="fas fa-bug-slash text-pink-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Depuración</p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-yellow-500/10 border border-yellow-500/20 text-center">
+                        <i class="fas fa-earth-americas text-yellow-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Eco-Futuro</p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-purple-500/10 border border-purple-500/20 text-center">
+                        <i class="fas fa-code-branch text-purple-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Algoritmos</p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-orange-500/10 border border-orange-500/20 text-center">
+                        <i class="fas fa-gamepad text-orange-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Proyectos</p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-cyan-500/10 border border-cyan-500/20 text-center">
+                        <i class="fas fa-briefcase text-cyan-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Carrera Tech</p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-red-500/10 border border-red-500/20 text-center">
+                        <i class="fas fa-users-gear text-red-400 text-3xl mb-3"></i>
+                        <p class="font-bold text-xs uppercase">Team Work</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1600') center/cover;">
+            <div class="max-w-4xl text-center px-6">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfI3iE8oO1t7uPZid33i6vG7u6aW2z4R6D0A&s" class="w-24 h-24 rounded-full border-4 border-blue-500 mx-auto mb-8 shadow-2xl object-cover" alt="Madre Eduviges">
+                <p class="text-3xl md:text-5xl italic font-serif leading-tight mb-8 text-blue-100">
+                    "Cada una de las acciones hechas con amor y abnegación aumenta la caridad y fortifica las buenas costumbres"
+                </p>
+                <div class="h-1 w-20 bg-blue-500 mx-auto mb-4"></div>
+                <h4 class="text-xl font-bold tracking-[0.3em] text-blue-400 uppercase">— MADRE EDUVIGES PORTALET —</h4>
+                <div class="mt-12">
+                    <button onclick="goToSlide(0)" class="bg-white text-black font-black py-4 px-10 rounded-full hover:bg-blue-400 hover:text-white transition-all uppercase tracking-tighter">Reiniciar Sistema</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="infoModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/95">
+        <div class="bg-slate-900 border-2 border-blue-500 p-10 rounded-[2.5rem] max-w-lg w-full relative">
+            <button onclick="hideInfo()" class="absolute top-6 right-6 text-slate-400 hover:text-white transition"><i class="fas fa-times-circle text-3xl"></i></button>
+            <h2 id="modalTitle" class="text-3xl font-bold text-blue-400 mb-4 uppercase"></h2>
+            <p id="modalBody" class="text-slate-300 text-lg leading-relaxed"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotContainer = document.getElementById('dotContainer');
+
+        // Generar puntos
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotContainer.appendChild(dot);
+        });
+
+        function updateSlider() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                dotContainer.children[index].classList.remove('active');
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                    dotContainer.children[index].classList.add('active');
+                }
+            });
+            prevBtn.classList.toggle('disabled', currentSlide === 0);
+            nextBtn.classList.toggle('disabled', currentSlide === slides.length - 1);
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateSlider(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlider(); } }
+        function goToSlide(index) { currentSlide = index; updateSlider(); }
+
+        function showInfo(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('infoModal').classList.remove('hidden');
+            document.getElementById('infoModal').classList.add('flex');
+        }
+
+        function hideInfo() {
+            document.getElementById('infoModal').classList.add('hidden');
+            document.getElementById('infoModal').classList.remove('flex');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "ArrowRight") nextSlide();
+            if(e.key === "ArrowLeft") prevSlide();
+        });
+
+        updateSlider();
+    </script>
+</body>
+</html>

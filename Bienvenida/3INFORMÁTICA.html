@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informática Creativa - 3ro Primaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Bungee&display=swap');
+        
+        body { font-family: 'Quicksand', sans-serif; overflow: hidden; background: #fdfcf0; }
+        .font-kids { font-family: 'Bungee', cursive; }
+        
+        .slide { 
+            display: none; height: 100vh; width: 100%; 
+            position: absolute; top: 0; left: 0;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .slide.active { display: flex; animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .nav-btn {
+            position: fixed; top: 50%; transform: translateY(-50%); z-index: 100;
+            width: 70px; height: 70px; border-radius: 20px;
+            background: #ff7e5f; color: white; font-size: 2rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 0 #d9534f; transition: all 0.2s;
+            border: 4px solid white;
+        }
+        .nav-btn:hover { transform: translateY(-50%) scale(1.1); cursor: pointer; background: #feb47b; }
+        .nav-btn:active { transform: translateY(-45%) scale(0.95); box-shadow: 0 5px 0 #d9534f; }
+        .nav-btn.disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
+
+        .bubble {
+            background: white; border-radius: 2rem;
+            border: 4px solid #6366f1; box-shadow: 10px 10px 0 rgba(99, 102, 241, 0.1);
+        }
+
+        .dot { width: 15px; height: 15px; border-radius: 50%; background: #ddd; transition: 0.3s; }
+        .dot.active { background: #6366f1; transform: scale(1.5); }
+
+        strong { color: #6366f1; font-weight: 700; }
+        .text-orange { color: #ff7e5f; }
+
+        @media (max-width: 768px) {
+            .nav-btn { width: 50px; height: 50px; bottom: 20px; top: auto; transform: none; font-size: 1.2rem; }
+            #nextBtn { right: 20px; } #prevBtn { left: 20px; }
+            .slide { padding: 15px; overflow-y: auto; }
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <button id="prevBtn" onclick="prevSlide()" class="nav-btn left-4 md:left-10"><i class="fas fa-arrow-left"></i></button>
+    <button id="nextBtn" onclick="nextSlide()" class="nav-btn right-4 md:right-10"><i class="fas fa-arrow-right"></i></button>
+
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-4" id="dotContainer"></div>
+
+    <main>
+        <section class="slide active" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);">
+            <div class="text-center text-white p-6">
+                <img src="https://cdn-icons-png.flaticon.com/512/3069/3069186.png" class="w-40 mx-auto mb-6 animate-bounce" alt="Ideas">
+                <h1 class="text-5xl md:text-7xl font-kids mb-4 tracking-wide shadow-text">¡EMPRENDE<br><span class="text-yellow-300">CON TECNOLOGÍA!</span></h1>
+                <p class="text-xl md:text-2xl font-semibold opacity-90">Informática - 3er Grado de Primaria</p>
+                <div class="mt-8 bg-white/20 py-2 px-6 rounded-full inline-block border border-white/30 text-sm font-bold">BIENVENIDOS AL EQUIPO</div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #fffdf0;">
+            <div class="max-w-5xl w-full px-6 flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <h2 class="text-4xl font-kids text-indigo-600 mb-6">Nuestra Gran Misión</h2>
+                    <div class="bubble p-8">
+                        <p class="text-xl leading-relaxed">
+                            Aprenderemos a <strong>Gestionar proyectos de emprendimiento</strong>. Esto significa que usaremos la computadora para convertir nuestras mejores ideas en proyectos que ayuden a los demás.
+                        </p>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&q=80&w=800" class="rounded-[3rem] border-8 border-white shadow-2xl" alt="Niños trabajando">
+                </div>
+            </div>
+        </section>
+
+        <section class="slide bg-indigo-50">
+            <div class="max-w-6xl w-full px-6 text-center">
+                <h2 class="text-4xl font-kids text-indigo-900 mb-10">¿Cómo trabajaremos?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="p-6 bg-white rounded-3xl shadow-lg border-b-8 border-yellow-400">
+                        <div class="text-4xl mb-3">💡</div>
+                        <h4 class="font-bold text-lg mb-2">Crear Valor</h4>
+                        <p class="text-sm">¡Tendremos <strong>ideas innovadoras</strong> para solucionar problemas!</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-3xl shadow-lg border-b-8 border-blue-400">
+                        <div class="text-4xl mb-3">🛠️</div>
+                        <h4 class="font-bold text-lg mb-2">Habilidades</h4>
+                        <p class="text-sm">Aprenderemos a usar programas para la <strong>producción</strong> de calidad.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-3xl shadow-lg border-b-8 border-green-400">
+                        <div class="text-4xl mb-3">🤝</div>
+                        <h4 class="font-bold text-lg mb-2">Cooperar</h4>
+                        <p class="text-sm">¡El mejor resultado se logra <strong>trabajando en equipo</strong>!</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-3xl shadow-lg border-b-8 border-pink-400">
+                        <div class="text-4xl mb-3">📊</div>
+                        <h4 class="font-bold text-lg mb-2">Evaluar</h4>
+                        <p class="text-sm">Revisaremos los <strong>resultados</strong> para que todo salga perfecto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #fff5f2;">
+            <div class="max-w-5xl w-full px-6 text-center">
+                <div class="inline-block bg-orange-500 text-white px-8 py-2 rounded-full font-bold mb-6">1° Y 2° BIMESTRE</div>
+                <h2 class="text-5xl font-kids text-orange-600 mb-8">PowerPoint Avanzado</h2>
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <img src="https://msftstories.thesourcemediaassets.com/sites/41/2020/06/PowerPoint-Live-BANNER-2-960x600.png" class="rounded-[2.5rem] shadow-xl" alt="Presentación">
+                    <div class="text-left space-y-4">
+                        <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+                            <i class="fas fa-magic text-orange-500"></i>
+                            <p>Crearemos <strong>presentaciones impactantes</strong> con animaciones.</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+                            <i class="fas fa-play-circle text-orange-500"></i>
+                            <p>Aprenderemos a insertar <strong>videos y sonidos</strong> geniales.</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+                            <i class="fas fa-mouse-pointer text-orange-500"></i>
+                            <p>Usaremos <strong>botones interactivos</strong> para navegar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #f3f0ff;">
+            <div class="max-w-5xl w-full px-6 text-center">
+                <div class="inline-block bg-indigo-600 text-white px-8 py-2 rounded-full font-bold mb-6">3° Y 4° BIMESTRE</div>
+                <h2 class="text-5xl font-kids text-indigo-600 mb-8">Diseño con Canva</h2>
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div class="text-left space-y-4 order-2 md:order-1">
+                        <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+                            <i class="fas fa-book-open text-indigo-500"></i>
+                            <p>¡Diseñaremos nuestras propias <strong>revistas digitales</strong>!</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+                            <i class="fas fa-palette text-indigo-500"></i>
+                            <p>Crearemos <strong>pósters y afiches</strong> para emprendedores.</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm">
+                            <i class="fas fa-cloud-upload-alt text-indigo-500"></i>
+                            <p>Aprenderemos a usar <strong>herramientas en la nube</strong>.</p>
+                        </div>
+                    </div>
+                    <img src="https://i.ytimg.com/vi/vhjGabka3Bw/maxresdefault.jpg" class="rounded-[2.5rem] shadow-xl order-1 md:order-2" alt="Diseño Gráfico">
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" style="background: #fff; border: 20px solid #6366f1;">
+            <div class="max-w-4xl text-center px-6">
+                <img src="https://hermanasdicperu.org/wp-content/uploads/2018/11/fundadores-1-473x473.jpg" class="w-32 h-32 rounded-full border-4 border-indigo-600 mx-auto mb-8 shadow-xl object-cover" alt="Madre Eduviges">
+                <p class="text-2xl md:text-4xl italic font-serif leading-tight mb-8 text-indigo-900">
+                    "Cada una de las acciones hechas con amor y abnegación aumenta la caridad y fortifica las buenas costumbres"
+                </p>
+                <div class="h-1.5 w-24 bg-yellow-400 mx-auto mb-6 rounded-full"></div>
+                <h4 class="text-xl font-bold tracking-[0.2em] text-indigo-600 uppercase">— MADRE EDUVIGES PORTALET —</h4>
+                <div class="mt-12">
+                    <button onclick="goToSlide(0)" class="bg-indigo-600 text-white font-bold py-4 px-12 rounded-full hover:bg-indigo-400 transition-all shadow-xl uppercase tracking-widest text-sm">
+                        ¡Comencemos!
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotContainer = document.getElementById('dotContainer');
+
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotContainer.appendChild(dot);
+        });
+
+        function updateSlider() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                dotContainer.children[index].classList.remove('active');
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                    dotContainer.children[index].classList.add('active');
+                }
+            });
+            prevBtn.classList.toggle('disabled', currentSlide === 0);
+            nextBtn.classList.toggle('disabled', currentSlide === slides.length - 1);
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateSlider(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlider(); } }
+        function goToSlide(index) { currentSlide = index; updateSlider(); }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "ArrowRight") nextSlide();
+            if(e.key === "ArrowLeft") prevSlide();
+        });
+
+        updateSlider();
+    </script>
+</body>
+</html>

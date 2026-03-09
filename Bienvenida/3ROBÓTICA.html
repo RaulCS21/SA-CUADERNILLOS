@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robótica & IA 3.0 - 3ro Secundaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;600;900&display=swap');
+        
+        body { font-family: 'Outfit', sans-serif; overflow: hidden; background: #04040a; color: white; }
+        .font-code { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Sistema de Sliders */
+        .slide { 
+            display: none; height: 100vh; width: 100%; 
+            position: absolute; top: 0; left: 0;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .slide.active { display: flex; animation: slideZoom 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        @keyframes slideZoom {
+            from { opacity: 0; transform: scale(1.1); filter: blur(10px); }
+            to { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+
+        /* Flechas de Navegación Gigantes y Pro */
+        .nav-arrow {
+            position: fixed; top: 50%; transform: translateY(-50%); z-index: 100;
+            width: 80px; height: 80px; border-radius: 24px;
+            background: rgba(251, 191, 36, 0.1); border: 2px solid #fbbf24;
+            color: #fbbf24; font-size: 2.5rem; display: flex;
+            align-items: center; justify-content: center;
+            transition: all 0.4s; backdrop-filter: blur(15px);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+        .nav-arrow:hover { 
+            background: #fbbf24; color: #000; 
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.5); 
+            transform: translateY(-50%) scale(1.1); 
+            cursor: pointer;
+        }
+        .nav-arrow.disabled { opacity: 0.1; pointer-events: none; filter: grayscale(1); }
+
+        .ai-border {
+            position: relative; border-radius: 2.5rem;
+            background: linear-gradient(135deg, rgba(251,191,36,0.05) 0%, rgba(59,130,246,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+        }
+
+        .dot { h-1.5; border-radius: 10px; background: rgba(255,255,255,0.1); transition: all 0.5s; }
+        .dot.active { background: #fbbf24; box-shadow: 0 0 15px #fbbf24; }
+
+        /* Estilo para las negritas corregidas */
+        strong { color: #fbbf24; font-weight: 700; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
+
+        @media (max-width: 768px) {
+            .nav-arrow { width: 60px; height: 60px; bottom: 30px; top: auto; transform: none; font-size: 1.5rem; }
+            #nextBtn { right: 20px; } #prevBtn { left: 20px; }
+            .slide { padding: 10px; overflow-y: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="prevBtn" onclick="prevSlide()" class="nav-arrow left-4 md:left-10"><i class="fas fa-chevron-left"></i></button>
+    <button id="nextBtn" onclick="nextSlide()" class="nav-arrow right-4 md:right-10"><i class="fas fa-chevron-right"></i></button>
+
+    <div class="fixed top-8 left-1/2 -translate-x-1/2 z-50 flex gap-3" id="dotContainer"></div>
+
+    <main>
+        <section class="slide active" style="background: radial-gradient(circle at top right, #1e1b4b, #04040a);">
+            <div class="text-center px-6">
+                <div class="mb-6 inline-block px-6 py-2 rounded-full bg-yellow-400/10 border border-yellow-400/50 text-yellow-400 font-bold tracking-widest text-xs uppercase">Inteligencia Artificial • 3ro Secundaria</div>
+                <h1 class="text-6xl md:text-9xl font-black mb-6 tracking-tighter">PYTHON <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-blue-500">& OPENCV</span></h1>
+                <p class="text-xl md:text-2xl text-slate-400 font-code">def futuro(estudiante): return "Innovación"</p>
+                <div class="mt-12 opacity-40 animate-pulse text-sm uppercase tracking-[0.5em]">Hackeando el Mañana</div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <div class="ai-border max-w-6xl w-full grid md:grid-cols-2 gap-0 overflow-hidden shadow-2xl bg-black/40">
+                <div class="p-10 md:p-16 flex flex-col justify-center">
+                    <h2 class="text-4xl font-bold mb-6 text-yellow-400">El Ojo Digital</h2>
+                    <p class="text-2xl text-slate-300 leading-relaxed mb-8">
+                        En 3er año, el reto es <strong>enseñarle al robot a ver</strong>. Usaremos <strong>Python</strong> para procesar imágenes en tiempo real, detectando objetos y tomando decisiones inteligentes.
+                    </p>
+                    <div class="flex items-center gap-4 text-blue-400 font-code border-t border-white/10 pt-6">
+                        <i class="fas fa-microchip text-2xl"></i>
+                        <span>import cv2 # Activando Visión</span>
+                    </div>
+                </div>
+                <div class="bg-blue-600/10 flex items-center justify-center relative border-l border-white/10">
+                    <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-overlay" alt="AI">
+                    <div class="relative z-10 text-center">
+                        <div class="w-48 h-48 border-4 border-dashed border-yellow-400 rounded-full flex items-center justify-center animate-[spin_15s_linear_infinite]">
+                            <i class="fas fa-expand text-5xl text-yellow-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide bg-slate-950">
+            <div class="max-w-6xl w-full px-6 text-center">
+                <h2 class="text-3xl font-bold mb-16 uppercase tracking-[0.3em] text-blue-400">Ruta de Maestría</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] hover:border-yellow-400 transition-all group">
+                        <i class="fab fa-python text-6xl text-blue-400 mb-6 group-hover:scale-110 transition"></i>
+                        <h3 class="text-2xl font-bold mb-4">1. Intro a Python</h3>
+                        <p class="text-slate-400">Dominamos la sintaxis del lenguaje más poderoso de la actualidad.</p>
+                    </div>
+                    <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] hover:border-pink-500 transition-all group">
+                        <i class="fas fa-gamepad text-6xl text-pink-500 mb-6 group-hover:scale-110 transition"></i>
+                        <h3 class="text-2xl font-bold mb-4">2. Game Logic</h3>
+                        <p class="text-slate-400">Creamos un juego simple para entender algoritmos de decisión.</p>
+                    </div>
+                    <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] hover:border-cyan-400 transition-all group">
+                        <i class="fas fa-eye text-6xl text-cyan-400 mb-6 group-hover:scale-110 transition"></i>
+                        <h3 class="text-2xl font-bold mb-4">3. OpenCV</h3>
+                        <p class="text-slate-400">Meta final: Reconocimiento de rostros y objetos en vivo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide bg-black">
+            <div class="max-w-4xl w-full text-center px-6">
+                <h2 class="text-blue-500 font-bold mb-4 uppercase tracking-widest text-sm">Competencia del Área</h2>
+                <p class="text-3xl italic mb-12 text-slate-200">"Diseña y produce prototipos tecnológicos para resolver problemas de su entorno"</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="showInfo('Plantea Problemas', 'Analizamos qué procesos pueden automatizarse mediante IA y Visión Artificial.')" class="p-6 bg-yellow-400/5 border border-yellow-400/20 rounded-2xl hover:bg-yellow-400 hover:text-black transition-all text-left flex justify-between items-center group">
+                        <span class="font-bold uppercase tracking-tighter">Plantea Problemas</span>
+                        <i class="fas fa-plus-circle opacity-20 group-hover:opacity-100"></i>
+                    </button>
+                    <button onclick="showInfo('Diseña Alternativas', 'Estructuramos el código en Python y el flujo de detección de OpenCV.')" class="p-6 bg-yellow-400/5 border border-yellow-400/20 rounded-2xl hover:bg-yellow-400 hover:text-black transition-all text-left flex justify-between items-center group">
+                        <span class="font-bold uppercase tracking-tighter">Diseña Alternativas</span>
+                        <i class="fas fa-plus-circle opacity-20 group-hover:opacity-100"></i>
+                    </button>
+                    <button onclick="showInfo('Implementa y Valida', 'Programamos y entrenamos nuestro modelo para que reconozca objetos reales.')" class="p-6 bg-yellow-400/5 border border-yellow-400/20 rounded-2xl hover:bg-yellow-400 hover:text-black transition-all text-left flex justify-between items-center group">
+                        <span class="font-bold uppercase tracking-tighter">Implementa y Valida</span>
+                        <i class="fas fa-plus-circle opacity-20 group-hover:opacity-100"></i>
+                    </button>
+                    <button onclick="showInfo('Evalúa y Comunica', 'Explicamos la eficiencia de nuestra IA y su impacto ético en la sociedad.')" class="p-6 bg-yellow-400/5 border border-yellow-400/20 rounded-2xl hover:bg-yellow-400 hover:text-black transition-all text-left flex justify-between items-center group">
+                        <span class="font-bold uppercase tracking-tighter">Evalúa y Comunica</span>
+                        <i class="fas fa-plus-circle opacity-20 group-hover:opacity-100"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide bg-slate-950">
+            <div class="max-w-6xl w-full px-6">
+                <h2 class="text-center text-3xl font-bold mb-12 uppercase">¿Por qué IA & Python?</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-8 rounded-[2rem] bg-blue-500/5 border border-blue-500/20 text-center">
+                        <i class="fas fa-brain text-blue-400 text-3xl mb-4"></i>
+                        <h4 class="text-[10px] font-bold uppercase tracking-widest">Inteligencia Real</h4>
+                    </div>
+                    <div class="p-8 rounded-[2rem] bg-yellow-500/5 border border-yellow-500/20 text-center">
+                        <i class="fas fa-eye text-yellow-400 text-3xl mb-4"></i>
+                        <h4 class="text-[10px] font-bold uppercase tracking-widest">Visión Artificial</h4>
+                    </div>
+                    <div class="p-8 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/20 text-center">
+                        <i class="fas fa-code text-emerald-400 text-3xl mb-4"></i>
+                        <h4 class="text-[10px] font-bold uppercase tracking-widest">Lenguaje #1</h4>
+                    </div>
+                    <div class="p-8 rounded-[2rem] bg-purple-500/5 border border-purple-500/20 text-center">
+                        <i class="fas fa-robot text-purple-400 text-3xl mb-4"></i>
+                        <h4 class="text-[10px] font-bold uppercase tracking-widest">Automatización</h4>
+                    </div>
+                </div>
+                <p class="text-center mt-12 text-slate-500 font-code text-sm">Preparándonos para las carreras del Siglo XXI</p>
+            </div>
+        </section>
+
+        <section class="slide" style="background: linear-gradient(rgba(4,4,10,0.9), rgba(4,4,10,0.9)), url('https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&q=80&w=1600') center/cover;">
+            <div class="max-w-4xl text-center px-6">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfI3iE8oO1t7uPZid33i6vG7u6aW2z4R6D0A&s" class="w-32 h-32 rounded-full border-4 border-yellow-400 mx-auto mb-8 shadow-[0_0_30px_rgba(251,191,36,0.5)] object-cover" alt="Madre Eduviges">
+                <p class="text-3xl md:text-5xl italic font-serif leading-tight mb-8 text-yellow-50">
+                    "Cada una de las acciones hechas con amor y abnegación aumenta la caridad y fortifica las buenas costumbres"
+                </p>
+                <div class="h-1 w-24 bg-yellow-400 mx-auto mb-6"></div>
+                <h4 class="text-xl font-bold tracking-[0.4em] text-yellow-400 uppercase">— MADRE EDUVIGES PORTALET —</h4>
+                <div class="mt-12">
+                    <button onclick="goToSlide(0)" class="px-12 py-5 bg-white text-black font-black rounded-full hover:bg-yellow-400 transition-all uppercase tracking-tighter shadow-2xl">Reiniciar Sistema</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="infoModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/95 backdrop-blur-md">
+        <div class="bg-slate-900 border-2 border-yellow-400/40 p-10 rounded-[3rem] max-w-lg w-full relative">
+            <button onclick="hideInfo()" class="absolute top-6 right-6 text-slate-500 hover:text-white transition"><i class="fas fa-times-circle text-3xl"></i></button>
+            <h2 id="modalTitle" class="text-3xl font-bold text-yellow-400 mb-4 uppercase tracking-tighter"></h2>
+            <p id="modalBody" class="text-slate-300 text-lg leading-relaxed"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotContainer = document.getElementById('dotContainer');
+
+        // Crear puntos
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot h-1 w-10 ${i === 0 ? 'active' : ''}`;
+            dot.style.cursor = "pointer";
+            dot.onclick = () => goToSlide(i);
+            dotContainer.appendChild(dot);
+        });
+
+        function updateSlider() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                dotContainer.children[index].classList.remove('active');
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                    dotContainer.children[index].classList.add('active');
+                }
+            });
+            prevBtn.classList.toggle('disabled', currentSlide === 0);
+            nextBtn.classList.toggle('disabled', currentSlide === slides.length - 1);
+        }
+
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateSlider(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlider(); } }
+        function goToSlide(index) { currentSlide = index; updateSlider(); }
+
+        function showInfo(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('infoModal').classList.remove('hidden');
+            document.getElementById('infoModal').classList.add('flex');
+        }
+
+        function hideInfo() {
+            document.getElementById('infoModal').classList.add('hidden');
+            document.getElementById('infoModal').classList.remove('flex');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "ArrowRight") nextSlide();
+            if(e.key === "ArrowLeft") prevSlide();
+        });
+
+        updateSlider();
+    </script>
+</body>
+</html>
